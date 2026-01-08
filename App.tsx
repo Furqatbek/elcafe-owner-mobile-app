@@ -1,12 +1,13 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
-import { TabNavigator } from './src/navigation';
+import { RootNavigator } from './src/navigation';
 import { useAuth } from './src/hooks';
 import { useUnreadCount } from './src/hooks/useNotifications';
+import { useAuthStore } from './src/store';
 import { colors } from './src/utils/colors';
 
 // Create a QueryClient instance
@@ -20,12 +21,19 @@ const queryClient = new QueryClient({
   },
 });
 
-// Component to handle initial data fetching
-const AppContent: React.FC = () => {
-  const { isLoading, isAuthenticated } = useAuth();
+// Component to fetch notifications when authenticated
+const NotificationsFetcher: React.FC = () => {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
 
-  // Fetch unread count on mount
+  // Only fetch unread count when authenticated
   useUnreadCount();
+
+  return null;
+};
+
+// Component to handle initial data fetching and auth
+const AppContent: React.FC = () => {
+  const { isLoading } = useAuth();
 
   if (isLoading) {
     return (
@@ -35,12 +43,10 @@ const AppContent: React.FC = () => {
     );
   }
 
-  // For demo purposes, we'll show the app even without authentication
-  // In production, you would redirect to a login screen if !isAuthenticated
-
   return (
     <NavigationContainer>
-      <TabNavigator />
+      <NotificationsFetcher />
+      <RootNavigator />
     </NavigationContainer>
   );
 };

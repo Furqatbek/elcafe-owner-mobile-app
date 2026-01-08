@@ -1,4 +1,5 @@
 export { default as apiClient, setAuthToken, getAuthToken, clearAuthToken } from './client';
+export { default as authApi } from './auth';
 export { default as dashboardApi } from './dashboard';
 export { default as analyticsApi } from './analytics';
 export { default as inventoryApi } from './inventory';

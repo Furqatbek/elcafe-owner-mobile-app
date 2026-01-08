@@ -8,7 +8,7 @@ const ENDPOINTS = {
 };
 
 export const dashboardApi = {
-  getDashboardData: async (restaurantId: string, period: PeriodType = 'today'): Promise<DashboardData> => {
+  getDashboardData: async (restaurantId: number, period: PeriodType = 'today'): Promise<DashboardData> => {
     const endpoint = ENDPOINTS[period];
     const response = await apiClient.get<DashboardData>(endpoint, {
       params: { restaurantId },
@@ -16,15 +16,15 @@ export const dashboardApi = {
     return response.data;
   },
 
-  getTodayData: async (restaurantId: string): Promise<DashboardData> => {
+  getTodayData: async (restaurantId: number): Promise<DashboardData> => {
     return dashboardApi.getDashboardData(restaurantId, 'today');
   },
 
-  getWeekData: async (restaurantId: string): Promise<DashboardData> => {
+  getWeekData: async (restaurantId: number): Promise<DashboardData> => {
     return dashboardApi.getDashboardData(restaurantId, 'week');
   },
 
-  getMonthData: async (restaurantId: string): Promise<DashboardData> => {
+  getMonthData: async (restaurantId: number): Promise<DashboardData> => {
     return dashboardApi.getDashboardData(restaurantId, 'month');
   },
 };

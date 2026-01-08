@@ -6,9 +6,13 @@ import {
   StyleSheet,
   RefreshControl,
   SafeAreaView,
+  TouchableOpacity,
+  Alert,
 } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useDashboard } from '../hooks/useDashboard';
+import { useAuthStore } from '../store';
 import { PeriodType } from '../types/api.types';
 import { colors } from '../utils/colors';
 import { formatDate } from '../utils/formatters';
@@ -31,6 +35,7 @@ export const HomeScreen: React.FC = () => {
   const navigation = useNavigation();
   const [period, setPeriod] = useState<PeriodType>('today');
   const { data, isLoading, isError, refetch, isRefetching } = useDashboard(period);
+  const { user, logout } = useAuthStore();
 
   const handleRefresh = useCallback(() => {
     refetch();
@@ -39,6 +44,21 @@ export const HomeScreen: React.FC = () => {
   const handleInventoryPress = useCallback(() => {
     (navigation as any).navigate('Inventory');
   }, [navigation]);
+
+  const handleLogout = useCallback(() => {
+    Alert.alert(
+      'Logout',
+      'Are you sure you want to logout?',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Logout',
+          style: 'destructive',
+          onPress: () => logout(),
+        },
+      ]
+    );
+  }, [logout]);
 
   const getPeriodTitle = () => {
     switch (period) {
@@ -135,10 +155,24 @@ export const HomeScreen: React.FC = () => {
       >
         {/* Header */}
         <View style={styles.header}>
+          <View style={styles.headerTop}>
+            <View style={styles.greeting}>
+              <Text style={styles.greetingText}>
+                Hello, {user?.firstName || 'Owner'}
+              </Text>
+              <Text style={styles.date}>
+                {formatDate(new Date().toISOString(), 'long')}
+              </Text>
+            </View>
+            <TouchableOpacity
+              style={styles.logoutButton}
+              onPress={handleLogout}
+              activeOpacity={0.7}
+            >
+              <Feather name="log-out" size={20} color={colors.danger} />
+            </TouchableOpacity>
+          </View>
           <Text style={styles.title}>{getPeriodTitle()}</Text>
-          <Text style={styles.date}>
-            {formatDate(new Date().toISOString(), 'long')}
-          </Text>
         </View>
 
         {/* Period Selector */}
@@ -169,15 +203,36 @@ const styles = StyleSheet.create({
     paddingTop: 16,
     paddingBottom: 8,
   },
+  headerTop: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+    marginBottom: 16,
+  },
+  greeting: {
+    flex: 1,
+  },
+  greetingText: {
+    fontSize: 15,
+    color: colors.textSecondary,
+    marginBottom: 2,
+  },
+  logoutButton: {
+    width: 40,
+    height: 40,
+    borderRadius: 12,
+    backgroundColor: `${colors.danger}10`,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
   title: {
     fontSize: 28,
     fontWeight: '700',
     color: colors.textPrimary,
   },
   date: {
-    fontSize: 14,
-    color: colors.textSecondary,
-    marginTop: 4,
+    fontSize: 13,
+    color: colors.textMuted,
   },
   section: {
     paddingHorizontal: 16,

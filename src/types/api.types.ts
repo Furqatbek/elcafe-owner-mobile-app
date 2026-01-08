@@ -168,22 +168,42 @@ export interface UnreadCountResponse {
 // ============== Auth Types ==============
 
 export interface User {
-  id: string;
+  id: number;
   email: string;
-  name: string;
+  firstName: string;
+  lastName: string;
+  phone: string | null;
   role: string;
-  restaurantId: string;
+  restaurantId: number;
+  active: boolean;
+  emailVerified: boolean;
+  createdAt: string;
 }
 
-export interface LoginResponse {
-  token: string;
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+export interface LoginData {
+  accessToken: string;
+  refreshToken: string;
+  tokenType: string;
   user: User;
 }
 
+export interface LoginResponse {
+  success: boolean;
+  message: string;
+  data: LoginData;
+  timestamp: string;
+}
+
 export interface AuthState {
-  token: string | null;
+  accessToken: string | null;
+  refreshToken: string | null;
   user: User | null;
-  restaurantId: string | null;
+  restaurantId: number | null;
   isAuthenticated: boolean;
   isLoading: boolean;
 }

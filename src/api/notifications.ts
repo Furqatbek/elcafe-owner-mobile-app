@@ -3,7 +3,7 @@ import { NotificationsResponse, UnreadCountResponse } from '../types/api.types';
 
 export const notificationsApi = {
   getNotifications: async (
-    userId: string,
+    userId: number,
     page: number = 0,
     size: number = 50
   ): Promise<NotificationsResponse> => {
@@ -21,7 +21,7 @@ export const notificationsApi = {
     return response.data;
   },
 
-  getUnreadCount: async (userId: string): Promise<number> => {
+  getUnreadCount: async (userId: number): Promise<number> => {
     const response = await apiClient.get<UnreadCountResponse>(
       '/api/v1/notifications/unread/count',
       {
@@ -38,7 +38,7 @@ export const notificationsApi = {
     await apiClient.patch(`/api/v1/notifications/${notificationId}/read`);
   },
 
-  markAllAsRead: async (userId: string): Promise<void> => {
+  markAllAsRead: async (userId: number): Promise<void> => {
     await apiClient.patch('/api/v1/notifications/mark-all-read', null, {
       params: {
         role: 'ADMIN',

@@ -2,7 +2,7 @@ import axios, { AxiosError, InternalAxiosRequestConfig } from 'axios';
 import * as SecureStore from 'expo-secure-store';
 import { config } from '../config/env';
 
-const TOKEN_KEY = 'auth_token';
+const ACCESS_TOKEN_KEY = 'access_token';
 
 export const apiClient = axios.create({
   baseURL: config.apiBaseUrl,
@@ -16,7 +16,7 @@ export const apiClient = axios.create({
 apiClient.interceptors.request.use(
   async (config: InternalAxiosRequestConfig) => {
     try {
-      const token = await SecureStore.getItemAsync(TOKEN_KEY);
+      const token = await SecureStore.getItemAsync(ACCESS_TOKEN_KEY);
       if (token && config.headers) {
         config.headers.Authorization = `Bearer ${token}`;
       }
@@ -37,7 +37,7 @@ apiClient.interceptors.response.use(
     if (error.response?.status === 401) {
       // Clear token and trigger logout
       try {
-        await SecureStore.deleteItemAsync(TOKEN_KEY);
+        await SecureStore.deleteItemAsync(ACCESS_TOKEN_KEY);
       } catch (e) {
         console.error('Error clearing token:', e);
       }
@@ -49,15 +49,15 @@ apiClient.interceptors.response.use(
 
 // Token management utilities
 export const setAuthToken = async (token: string): Promise<void> => {
-  await SecureStore.setItemAsync(TOKEN_KEY, token);
+  await SecureStore.setItemAsync(ACCESS_TOKEN_KEY, token);
 };
 
 export const getAuthToken = async (): Promise<string | null> => {
-  return await SecureStore.getItemAsync(TOKEN_KEY);
+  return await SecureStore.getItemAsync(ACCESS_TOKEN_KEY);
 };
 
 export const clearAuthToken = async (): Promise<void> => {
-  await SecureStore.deleteItemAsync(TOKEN_KEY);
+  await SecureStore.deleteItemAsync(ACCESS_TOKEN_KEY);
 };
 
 export default apiClient;

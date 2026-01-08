@@ -3,7 +3,8 @@ import { useAuthStore } from '../store';
 
 export const useAuth = () => {
   const {
-    token,
+    accessToken,
+    refreshToken,
     user,
     restaurantId,
     isAuthenticated,
@@ -19,7 +20,8 @@ export const useAuth = () => {
   }, [initialize]);
 
   return {
-    token,
+    accessToken,
+    refreshToken,
     user,
     restaurantId,
     isAuthenticated,

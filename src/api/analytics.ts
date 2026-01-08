@@ -9,7 +9,7 @@ import {
 
 export const analyticsApi = {
   getDailyRevenue: async (
-    restaurantId: string,
+    restaurantId: number,
     dateRange: DateRange
   ): Promise<DailyRevenue[]> => {
     const response = await apiClient.get<DailyRevenue[]>(
@@ -26,7 +26,7 @@ export const analyticsApi = {
   },
 
   getCOGS: async (
-    restaurantId: string,
+    restaurantId: number,
     dateRange: DateRange
   ): Promise<COGSData> => {
     const response = await apiClient.get<COGSData>(
@@ -43,7 +43,7 @@ export const analyticsApi = {
   },
 
   getPeakHours: async (
-    restaurantId: string,
+    restaurantId: number,
     dateRange: DateRange
   ): Promise<PeakHoursData> => {
     const response = await apiClient.get<PeakHoursData>(
@@ -60,7 +60,7 @@ export const analyticsApi = {
   },
 
   getSalesByCategory: async (
-    restaurantId: string,
+    restaurantId: number,
     dateRange: DateRange
   ): Promise<CategorySales[]> => {
     const response = await apiClient.get<CategorySales[]>(

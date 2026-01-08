@@ -2,7 +2,7 @@ import apiClient from './client';
 import { StockSummary, InventoryTurnover, DateRange } from '../types/api.types';
 
 export const inventoryApi = {
-  getStockSummary: async (restaurantId: string): Promise<StockSummary> => {
+  getStockSummary: async (restaurantId: number): Promise<StockSummary> => {
     const response = await apiClient.get<StockSummary>(
       `/api/v1/stock-alerts/summary/${restaurantId}`
     );
@@ -10,7 +10,7 @@ export const inventoryApi = {
   },
 
   getInventoryTurnover: async (
-    restaurantId: string,
+    restaurantId: number,
     dateRange: DateRange
   ): Promise<InventoryTurnover> => {
     const response = await apiClient.get<InventoryTurnover>(

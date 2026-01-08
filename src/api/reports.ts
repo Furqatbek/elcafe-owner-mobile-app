@@ -9,7 +9,7 @@ import {
 
 export const reportsApi = {
   getProfitLoss: async (
-    restaurantId: string,
+    restaurantId: number,
     dateRange: DateRange
   ): Promise<ProfitLossReport> => {
     const response = await apiClient.get<ProfitLossReport>(
@@ -26,7 +26,7 @@ export const reportsApi = {
   },
 
   getCOGSReport: async (
-    restaurantId: string,
+    restaurantId: number,
     dateRange: DateRange
   ): Promise<COGSReport> => {
     const response = await apiClient.get<COGSReport>(
@@ -43,7 +43,7 @@ export const reportsApi = {
   },
 
   getCustomerRetention: async (
-    restaurantId: string,
+    restaurantId: number,
     dateRange: DateRange
   ): Promise<CustomerRetention> => {
     const response = await apiClient.get<CustomerRetention>(
@@ -59,7 +59,7 @@ export const reportsApi = {
     return response.data;
   },
 
-  getCustomerLTV: async (restaurantId: string): Promise<CustomerLTV> => {
+  getCustomerLTV: async (restaurantId: number): Promise<CustomerLTV> => {
     const response = await apiClient.get<CustomerLTV>(
       '/api/v1/analytics/customer/ltv',
       {
