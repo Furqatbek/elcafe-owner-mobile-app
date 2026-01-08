@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+import { Platform } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { User, AuthState, LoginCredentials } from '../types/api.types';
 import { authApi } from '../api';
@@ -7,6 +8,30 @@ const ACCESS_TOKEN_KEY = 'access_token';
 const REFRESH_TOKEN_KEY = 'refresh_token';
 const USER_KEY = 'user_data';
 const RESTAURANT_KEY = 'restaurant_id';
+
+// Storage abstraction for web compatibility
+const storage = {
+  getItem: async (key: string): Promise<string | null> => {
+    if (Platform.OS === 'web') {
+      return localStorage.getItem(key);
+    }
+    return SecureStore.getItemAsync(key);
+  },
+  setItem: async (key: string, value: string): Promise<void> => {
+    if (Platform.OS === 'web') {
+      localStorage.setItem(key, value);
+      return;
+    }
+    return SecureStore.setItemAsync(key, value);
+  },
+  deleteItem: async (key: string): Promise<void> => {
+    if (Platform.OS === 'web') {
+      localStorage.removeItem(key);
+      return;
+    }
+    return SecureStore.deleteItemAsync(key);
+  },
+};
 
 interface AuthStore extends AuthState {
   initialize: () => Promise<void>;
@@ -28,10 +53,10 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       set({ isLoading: true });
 
       const [accessToken, refreshToken, userJson, restaurantId] = await Promise.all([
-        SecureStore.getItemAsync(ACCESS_TOKEN_KEY),
-        SecureStore.getItemAsync(REFRESH_TOKEN_KEY),
-        SecureStore.getItemAsync(USER_KEY),
-        SecureStore.getItemAsync(RESTAURANT_KEY),
+        storage.getItem(ACCESS_TOKEN_KEY),
+        storage.getItem(REFRESH_TOKEN_KEY),
+        storage.getItem(USER_KEY),
+        storage.getItem(RESTAURANT_KEY),
       ]);
 
       if (accessToken && userJson) {
@@ -64,10 +89,10 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       const { accessToken, refreshToken, user } = response.data;
 
       await Promise.all([
-        SecureStore.setItemAsync(ACCESS_TOKEN_KEY, accessToken),
-        SecureStore.setItemAsync(REFRESH_TOKEN_KEY, refreshToken),
-        SecureStore.setItemAsync(USER_KEY, JSON.stringify(user)),
-        SecureStore.setItemAsync(RESTAURANT_KEY, user.restaurantId.toString()),
+        storage.setItem(ACCESS_TOKEN_KEY, accessToken),
+        storage.setItem(REFRESH_TOKEN_KEY, refreshToken),
+        storage.setItem(USER_KEY, JSON.stringify(user)),
+        storage.setItem(RESTAURANT_KEY, user.restaurantId.toString()),
       ]);
 
       set({
@@ -93,10 +118,10 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       }
 
       await Promise.all([
-        SecureStore.deleteItemAsync(ACCESS_TOKEN_KEY),
-        SecureStore.deleteItemAsync(REFRESH_TOKEN_KEY),
-        SecureStore.deleteItemAsync(USER_KEY),
-        SecureStore.deleteItemAsync(RESTAURANT_KEY),
+        storage.deleteItem(ACCESS_TOKEN_KEY),
+        storage.deleteItem(REFRESH_TOKEN_KEY),
+        storage.deleteItem(USER_KEY),
+        storage.deleteItem(RESTAURANT_KEY),
       ]);
 
       set({
@@ -114,7 +139,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
 
   setRestaurantId: async (id: number) => {
     try {
-      await SecureStore.setItemAsync(RESTAURANT_KEY, id.toString());
+      await storage.setItem(RESTAURANT_KEY, id.toString());
       set({ restaurantId: id });
     } catch (error) {
       console.error('Error saving restaurant ID:', error);
