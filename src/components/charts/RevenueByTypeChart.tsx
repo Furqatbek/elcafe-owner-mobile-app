@@ -6,7 +6,7 @@ import { formatCurrency, formatPercentage } from '../../utils/formatters';
 import Card from '../common/Card';
 
 interface RevenueByTypeChartProps {
-  data: Record<string, number>;
+  data?: Record<string, number> | null;
   title?: string;
 }
 
@@ -15,9 +15,10 @@ export const RevenueByTypeChart: React.FC<RevenueByTypeChartProps> = ({
   title = 'Revenue by Order Type',
 }) => {
   const screenWidth = Dimensions.get('window').width - 64;
-  const total = Object.values(data).reduce((sum, val) => sum + val, 0);
+  const safeData = data ?? {};
+  const total = Object.values(safeData).reduce((sum, val) => sum + (val ?? 0), 0);
 
-  const chartData = Object.entries(data)
+  const chartData = Object.entries(safeData)
     .filter(([_, value]) => value > 0)
     .map(([key, value], index) => ({
       name: key.replace('_', ' '),
