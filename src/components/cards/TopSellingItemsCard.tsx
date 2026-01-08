@@ -7,7 +7,7 @@ import { formatCurrency, formatPercentage } from '../../utils/formatters';
 import Card from '../common/Card';
 
 interface TopSellingItemsCardProps {
-  items: SoldItem[];
+  items?: SoldItem[] | null;
   limit?: number;
 }
 
@@ -15,7 +15,8 @@ export const TopSellingItemsCard: React.FC<TopSellingItemsCardProps> = ({
   items,
   limit = 3,
 }) => {
-  const topItems = items.slice(0, limit);
+  const safeItems = items ?? [];
+  const topItems = safeItems.slice(0, limit);
 
   if (topItems.length === 0) {
     return (
