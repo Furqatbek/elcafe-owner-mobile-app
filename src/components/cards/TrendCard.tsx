@@ -6,10 +6,20 @@ import { DashboardComparison, TrendDirection } from '../../types/api.types';
 import Card from '../common/Card';
 
 interface TrendCardProps {
-  comparison: DashboardComparison;
+  comparison?: DashboardComparison | null;
 }
 
+const defaultComparison: DashboardComparison = {
+  incomeChange: 0,
+  expenseChange: 0,
+  profitChange: 0,
+  orderCountChange: 0,
+  trend: 'STABLE',
+};
+
 export const TrendCard: React.FC<TrendCardProps> = ({ comparison }) => {
+  const data = comparison ?? defaultComparison;
+
   const getTrendIcon = (trend: TrendDirection): keyof typeof Feather.glyphMap => {
     switch (trend) {
       case 'UP':
@@ -32,22 +42,22 @@ export const TrendCard: React.FC<TrendCardProps> = ({ comparison }) => {
     }
   };
 
-  const trendColor = getTrendColor(comparison.trend);
+  const trendColor = getTrendColor(data.trend);
 
   const metrics = [
-    { label: 'Income', value: comparison.incomeChange, positive: true },
-    { label: 'Expenses', value: comparison.expenseChange, positive: false },
-    { label: 'Profit', value: comparison.profitChange, positive: true },
-    { label: 'Orders', value: comparison.orderCountChange, positive: true },
+    { label: 'Income', value: data.incomeChange ?? 0, positive: true },
+    { label: 'Expenses', value: data.expenseChange ?? 0, positive: false },
+    { label: 'Profit', value: data.profitChange ?? 0, positive: true },
+    { label: 'Orders', value: data.orderCountChange ?? 0, positive: true },
   ];
 
   return (
     <Card padding="medium">
       <View style={styles.header}>
         <View style={[styles.trendBadge, { backgroundColor: `${trendColor}15` }]}>
-          <Feather name={getTrendIcon(comparison.trend)} size={18} color={trendColor} />
+          <Feather name={getTrendIcon(data.trend)} size={18} color={trendColor} />
           <Text style={[styles.trendText, { color: trendColor }]}>
-            {comparison.trend === 'STABLE' ? 'Stable' : `${comparison.trend === 'UP' ? 'Up' : 'Down'} vs Yesterday`}
+            {data.trend === 'STABLE' ? 'Stable' : `${data.trend === 'UP' ? 'Up' : 'Down'} vs Yesterday`}
           </Text>
         </View>
       </View>
