@@ -136,17 +136,18 @@ export const InventoryScreen: React.FC = () => {
 
     const hasStockAlerts =
       stockData &&
-      (stockData.criticalCount > 0 ||
-        stockData.lowStockCount > 0 ||
-        stockData.reorderCount > 0);
+      ((stockData.criticalCount ?? 0) > 0 ||
+        (stockData.lowStockCount ?? 0) > 0 ||
+        (stockData.reorderCount ?? 0) > 0);
 
-    const criticalItems = stockData?.lowStockItems.filter(
+    const lowStockItems = stockData?.lowStockItems ?? [];
+    const criticalItems = lowStockItems.filter(
       (i) => i.alertLevel === 'CRITICAL'
     );
-    const lowItems = stockData?.lowStockItems.filter(
+    const lowItems = lowStockItems.filter(
       (i) => i.alertLevel === 'LOW'
     );
-    const reorderItems = stockData?.lowStockItems.filter(
+    const reorderItems = lowStockItems.filter(
       (i) => i.alertLevel === 'REORDER'
     );
 
@@ -159,21 +160,21 @@ export const InventoryScreen: React.FC = () => {
               <View style={[styles.statCard, { backgroundColor: `${colors.danger}10` }]}>
                 <Feather name="alert-circle" size={20} color={colors.danger} />
                 <Text style={[styles.statValue, { color: colors.danger }]}>
-                  {stockData.criticalCount}
+                  {stockData.criticalCount ?? 0}
                 </Text>
                 <Text style={styles.statLabel}>Critical</Text>
               </View>
               <View style={[styles.statCard, { backgroundColor: `${colors.warning}10` }]}>
                 <Feather name="alert-triangle" size={20} color={colors.warning} />
                 <Text style={[styles.statValue, { color: colors.warning }]}>
-                  {stockData.lowStockCount}
+                  {stockData.lowStockCount ?? 0}
                 </Text>
                 <Text style={styles.statLabel}>Low Stock</Text>
               </View>
               <View style={[styles.statCard, { backgroundColor: '#F9731610' }]}>
                 <Feather name="package" size={20} color="#F97316" />
                 <Text style={[styles.statValue, { color: '#F97316' }]}>
-                  {stockData.reorderCount}
+                  {stockData.reorderCount ?? 0}
                 </Text>
                 <Text style={styles.statLabel}>Reorder</Text>
               </View>
@@ -229,14 +230,14 @@ export const InventoryScreen: React.FC = () => {
                 <View style={styles.metricItem}>
                   <Feather name="refresh-cw" size={20} color={colors.primary} />
                   <Text style={styles.metricValue}>
-                    {turnoverData.turnoverRatio.toFixed(2)}x
+                    {(turnoverData.turnoverRatio ?? 0).toFixed(2)}x
                   </Text>
                   <Text style={styles.metricLabel}>Turnover Ratio</Text>
                 </View>
                 <View style={styles.metricItem}>
                   <Feather name="clock" size={20} color={colors.primary} />
                   <Text style={styles.metricValue}>
-                    {Math.round(turnoverData.daysToSellInventory)}
+                    {Math.round(turnoverData.daysToSellInventory ?? 0)}
                   </Text>
                   <Text style={styles.metricLabel}>Days to Sell</Text>
                 </View>
