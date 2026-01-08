@@ -7,7 +7,7 @@ import { formatCurrency, formatPercentage } from '../../utils/formatters';
 import Card from '../common/Card';
 
 interface CategorySalesChartProps {
-  data: CategorySales[];
+  data?: CategorySales[] | Record<string, unknown> | null;
   title?: string;
 }
 
@@ -17,7 +17,25 @@ export const CategorySalesChart: React.FC<CategorySalesChartProps> = ({
 }) => {
   const screenWidth = Dimensions.get('window').width - 64;
 
-  if (data.length === 0) {
+  // Handle both array and wrapped object responses
+  const extractData = (): CategorySales[] => {
+    if (!data) return [];
+    if (Array.isArray(data)) return data;
+    // If data is wrapped in an object (e.g., { data: [...] } or { content: [...] })
+    if (typeof data === 'object') {
+      if (Array.isArray((data as Record<string, unknown>).data)) {
+        return (data as Record<string, unknown>).data as CategorySales[];
+      }
+      if (Array.isArray((data as Record<string, unknown>).content)) {
+        return (data as Record<string, unknown>).content as CategorySales[];
+      }
+    }
+    return [];
+  };
+
+  const safeData = extractData();
+
+  if (safeData.length === 0) {
     return (
       <Card title={title}>
         <Text style={styles.emptyText}>No data available</Text>
@@ -25,9 +43,9 @@ export const CategorySalesChart: React.FC<CategorySalesChartProps> = ({
     );
   }
 
-  const chartData = data.slice(0, 6).map((item, index) => ({
+  const chartData = safeData.slice(0, 6).map((item, index) => ({
     name: item.categoryName,
-    value: item.totalRevenue,
+    value: item.totalRevenue ?? 0,
     color: pieChartColors[index % pieChartColors.length],
     legendFontColor: colors.textSecondary,
     legendFontSize: 11,
@@ -51,7 +69,7 @@ export const CategorySalesChart: React.FC<CategorySalesChartProps> = ({
         />
       </View>
       <View style={styles.categoryList}>
-        {data.slice(0, 6).map((item, index) => (
+        {safeData.slice(0, 6).map((item, index) => (
           <View key={item.categoryName} style={styles.categoryItem}>
             <View style={styles.categoryLeft}>
               <View
