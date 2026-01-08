@@ -6,38 +6,48 @@ import { OrderStats } from '../../types/api.types';
 import { formatNumber, formatCurrency } from '../../utils/formatters';
 
 interface OrderStatsCardProps {
-  stats: OrderStats;
+  stats?: OrderStats | null;
 }
 
+const defaultStats: OrderStats = {
+  totalOrders: 0,
+  completedOrders: 0,
+  cancelledOrders: 0,
+  averageOrderValue: 0,
+  totalItemsSold: 0,
+};
+
 export const OrderStatsCard: React.FC<OrderStatsCardProps> = ({ stats }) => {
+  const data = stats ?? defaultStats;
+
   const items = [
     {
       label: 'Total Orders',
-      value: formatNumber(stats.totalOrders),
+      value: formatNumber(data.totalOrders),
       icon: 'shopping-bag' as const,
       color: colors.primary,
     },
     {
       label: 'Avg Order Value',
-      value: formatCurrency(stats.averageOrderValue),
+      value: formatCurrency(data.averageOrderValue),
       icon: 'dollar-sign' as const,
       color: colors.success,
     },
     {
       label: 'Items Sold',
-      value: formatNumber(stats.totalItemsSold),
+      value: formatNumber(data.totalItemsSold),
       icon: 'package' as const,
       color: '#8B5CF6',
     },
     {
       label: 'Completed',
-      value: formatNumber(stats.completedOrders),
+      value: formatNumber(data.completedOrders),
       icon: 'check-circle' as const,
       color: colors.success,
     },
     {
       label: 'Cancelled',
-      value: formatNumber(stats.cancelledOrders),
+      value: formatNumber(data.cancelledOrders),
       icon: 'x-circle' as const,
       color: colors.danger,
     },

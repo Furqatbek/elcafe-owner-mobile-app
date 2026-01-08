@@ -7,7 +7,7 @@ import { formatHour } from '../../utils/formatters';
 import Card from '../common/Card';
 
 interface PeakHoursChartProps {
-  data: PeakHoursData;
+  data?: PeakHoursData | null;
   title?: string;
 }
 
@@ -17,7 +17,7 @@ export const PeakHoursChart: React.FC<PeakHoursChartProps> = ({
 }) => {
   const screenWidth = Dimensions.get('window').width - 64;
 
-  if (!data.peakHours || data.peakHours.length === 0) {
+  if (!data?.peakHours || data.peakHours.length === 0) {
     return (
       <Card title={title}>
         <Text style={styles.emptyText}>No data available</Text>
@@ -38,13 +38,16 @@ export const PeakHoursChart: React.FC<PeakHoursChartProps> = ({
     ],
   };
 
+  const peakStartHour = data.peakStartHour ?? 0;
+  const peakEndHour = data.peakEndHour ?? 0;
+
   return (
     <Card title={title}>
       <View style={styles.peakInfo}>
         <View style={styles.peakBadge}>
           <Text style={styles.peakLabel}>Peak Time</Text>
           <Text style={styles.peakValue}>
-            {formatHour(data.peakStartHour)} - {formatHour(data.peakEndHour)}
+            {formatHour(peakStartHour)} - {formatHour(peakEndHour)}
           </Text>
         </View>
       </View>

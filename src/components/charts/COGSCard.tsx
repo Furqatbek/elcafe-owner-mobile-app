@@ -7,32 +7,44 @@ import { formatCurrency, formatPercentage } from '../../utils/formatters';
 import Card from '../common/Card';
 
 interface COGSCardProps {
-  data: COGSData;
+  data?: COGSData | null;
   title?: string;
 }
+
+const defaultData: COGSData = {
+  totalCOGS: 0,
+  totalRevenue: 0,
+  foodCostPercentage: 0,
+  grossProfitMargin: 0,
+  grossProfit: 0,
+};
 
 export const COGSCard: React.FC<COGSCardProps> = ({
   data,
   title = 'Cost Analysis',
 }) => {
+  const safeData = data ?? defaultData;
+  const foodCostPercentage = safeData.foodCostPercentage ?? 0;
+  const grossProfitMargin = safeData.grossProfitMargin ?? 0;
+
   const metrics = [
     {
       label: 'Food Cost',
-      value: formatPercentage(data.foodCostPercentage),
+      value: formatPercentage(foodCostPercentage),
       icon: 'shopping-cart' as const,
-      color: data.foodCostPercentage > 35 ? colors.danger : colors.success,
+      color: foodCostPercentage > 35 ? colors.danger : colors.success,
     },
     {
       label: 'Gross Profit',
-      value: formatCurrency(data.grossProfit),
+      value: formatCurrency(safeData.grossProfit),
       icon: 'dollar-sign' as const,
       color: colors.success,
     },
     {
       label: 'Gross Margin',
-      value: formatPercentage(data.grossProfitMargin),
+      value: formatPercentage(grossProfitMargin),
       icon: 'percent' as const,
-      color: data.grossProfitMargin > 60 ? colors.success : colors.warning,
+      color: grossProfitMargin > 60 ? colors.success : colors.warning,
     },
   ];
 
@@ -54,13 +66,13 @@ export const COGSCard: React.FC<COGSCardProps> = ({
       <View style={styles.totalRow}>
         <View style={styles.totalItem}>
           <Text style={styles.totalLabel}>Total Revenue</Text>
-          <Text style={styles.totalValue}>{formatCurrency(data.totalRevenue)}</Text>
+          <Text style={styles.totalValue}>{formatCurrency(safeData.totalRevenue)}</Text>
         </View>
         <View style={styles.divider} />
         <View style={styles.totalItem}>
           <Text style={styles.totalLabel}>Total COGS</Text>
           <Text style={[styles.totalValue, { color: colors.danger }]}>
-            {formatCurrency(data.totalCOGS)}
+            {formatCurrency(safeData.totalCOGS)}
           </Text>
         </View>
       </View>
