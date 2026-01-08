@@ -7,7 +7,7 @@ import { formatCompactCurrency } from '../../utils/formatters';
 import Card from '../common/Card';
 
 interface RevenueLineChartProps {
-  data: DailyRevenue[];
+  data?: DailyRevenue[] | null;
   title?: string;
 }
 
@@ -16,8 +16,9 @@ export const RevenueLineChart: React.FC<RevenueLineChartProps> = ({
   title = 'Revenue Trend',
 }) => {
   const screenWidth = Dimensions.get('window').width - 64;
+  const safeData = data ?? [];
 
-  if (data.length === 0) {
+  if (safeData.length === 0) {
     return (
       <Card title={title}>
         <Text style={styles.emptyText}>No data available</Text>
@@ -26,21 +27,21 @@ export const RevenueLineChart: React.FC<RevenueLineChartProps> = ({
   }
 
   const chartData = {
-    labels: data.map((item) => {
+    labels: safeData.map((item) => {
       const date = new Date(item.date);
       return `${date.getMonth() + 1}/${date.getDate()}`;
     }),
     datasets: [
       {
-        data: data.map((item) => item.totalRevenue),
+        data: safeData.map((item) => item.totalRevenue ?? 0),
         color: () => colors.primary,
         strokeWidth: 2,
       },
     ],
   };
 
-  const totalRevenue = data.reduce((sum, item) => sum + item.totalRevenue, 0);
-  const avgRevenue = totalRevenue / data.length;
+  const totalRevenue = safeData.reduce((sum, item) => sum + (item.totalRevenue ?? 0), 0);
+  const avgRevenue = totalRevenue / safeData.length;
 
   return (
     <Card title={title}>
