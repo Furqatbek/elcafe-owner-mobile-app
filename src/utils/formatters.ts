@@ -5,16 +5,17 @@
  * @param locale - Locale string (default: en-US)
  */
 export const formatCurrency = (
-  value: number,
+  value: number | undefined | null,
   currency: string = 'USD',
   locale: string = 'en-US'
 ): string => {
+  const safeValue = value ?? 0;
   return new Intl.NumberFormat(locale, {
     style: 'currency',
     currency,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
-  }).format(value);
+  }).format(safeValue);
 };
 
 /**
@@ -23,16 +24,17 @@ export const formatCurrency = (
  * @param currency - Currency code (default: USD)
  */
 export const formatCompactCurrency = (
-  value: number,
+  value: number | undefined | null,
   currency: string = 'USD'
 ): string => {
-  if (Math.abs(value) >= 1000000) {
-    return `$${(value / 1000000).toFixed(1)}M`;
+  const safeValue = value ?? 0;
+  if (Math.abs(safeValue) >= 1000000) {
+    return `$${(safeValue / 1000000).toFixed(1)}M`;
   }
-  if (Math.abs(value) >= 1000) {
-    return `$${(value / 1000).toFixed(1)}K`;
+  if (Math.abs(safeValue) >= 1000) {
+    return `$${(safeValue / 1000).toFixed(1)}K`;
   }
-  return formatCurrency(value, currency);
+  return formatCurrency(safeValue, currency);
 };
 
 /**
@@ -42,11 +44,12 @@ export const formatCompactCurrency = (
  * @param isDecimal - Whether the value is a decimal (0-1) or percentage (0-100)
  */
 export const formatPercentage = (
-  value: number,
+  value: number | undefined | null,
   decimals: number = 1,
   isDecimal: boolean = false
 ): string => {
-  const percentValue = isDecimal ? value * 100 : value;
+  const safeValue = value ?? 0;
+  const percentValue = isDecimal ? safeValue * 100 : safeValue;
   return `${percentValue.toFixed(decimals)}%`;
 };
 
@@ -54,22 +57,24 @@ export const formatPercentage = (
  * Format a large number with abbreviations (e.g., 1.2K, 1.5M)
  * @param value - The number to format
  */
-export const formatCompactNumber = (value: number): string => {
-  if (Math.abs(value) >= 1000000) {
-    return `${(value / 1000000).toFixed(1)}M`;
+export const formatCompactNumber = (value: number | undefined | null): string => {
+  const safeValue = value ?? 0;
+  if (Math.abs(safeValue) >= 1000000) {
+    return `${(safeValue / 1000000).toFixed(1)}M`;
   }
-  if (Math.abs(value) >= 1000) {
-    return `${(value / 1000).toFixed(1)}K`;
+  if (Math.abs(safeValue) >= 1000) {
+    return `${(safeValue / 1000).toFixed(1)}K`;
   }
-  return value.toLocaleString();
+  return safeValue.toLocaleString();
 };
 
 /**
  * Format a number with comma separators
  * @param value - The number to format
  */
-export const formatNumber = (value: number, decimals: number = 0): string => {
-  return value.toLocaleString('en-US', {
+export const formatNumber = (value: number | undefined | null, decimals: number = 0): string => {
+  const safeValue = value ?? 0;
+  return safeValue.toLocaleString('en-US', {
     minimumFractionDigits: decimals,
     maximumFractionDigits: decimals,
   });

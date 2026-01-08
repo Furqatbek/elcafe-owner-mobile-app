@@ -27,11 +27,16 @@ export const useUnreadCount = () => {
     queryKey: ['notifications', 'unreadCount', user?.id],
     queryFn: async () => {
       if (!user?.id) {
-        throw new Error('User ID is required');
+        return 0;
       }
-      const count = await notificationsApi.getUnreadCount(user.id);
-      setUnreadCount(count);
-      return count;
+      try {
+        const count = await notificationsApi.getUnreadCount(user.id);
+        setUnreadCount(count ?? 0);
+        return count ?? 0;
+      } catch (error) {
+        console.warn('Failed to fetch unread count:', error);
+        return 0;
+      }
     },
     enabled: !!user?.id,
     staleTime: 1000 * 30, // 30 seconds

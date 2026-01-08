@@ -6,10 +6,10 @@ import { formatCurrency, formatPercentage } from '../../utils/formatters';
 import Card from '../common/Card';
 
 interface FinancialSummaryCardProps {
-  totalIncome: number;
-  totalExpenses: number;
-  netProfit: number;
-  profitMargin: number;
+  totalIncome?: number | null;
+  totalExpenses?: number | null;
+  netProfit?: number | null;
+  profitMargin?: number | null;
 }
 
 export const FinancialSummaryCard: React.FC<FinancialSummaryCardProps> = ({
