@@ -6,15 +6,21 @@ import { InventoryAlerts } from '../../types/api.types';
 import Card from '../common/Card';
 
 interface InventoryAlertCardProps {
-  alerts: InventoryAlerts;
+  alerts?: InventoryAlerts | null;
   onPress?: () => void;
 }
+
+const defaultAlerts: InventoryAlerts = {
+  lowStockCount: 0,
+  reorderCount: 0,
+};
 
 export const InventoryAlertCard: React.FC<InventoryAlertCardProps> = ({
   alerts,
   onPress,
 }) => {
-  const hasAlerts = alerts.lowStockCount > 0 || alerts.reorderCount > 0;
+  const safeAlerts = alerts ?? defaultAlerts;
+  const hasAlerts = (safeAlerts.lowStockCount ?? 0) > 0 || (safeAlerts.reorderCount ?? 0) > 0;
 
   if (!hasAlerts) {
     return (
@@ -40,19 +46,19 @@ export const InventoryAlertCard: React.FC<InventoryAlertCardProps> = ({
           <View style={styles.alertContent}>
             <Text style={styles.alertTitle}>Inventory Alerts</Text>
             <View style={styles.alertStats}>
-              {alerts.lowStockCount > 0 && (
+              {(safeAlerts.lowStockCount ?? 0) > 0 && (
                 <View style={styles.alertBadge}>
                   <View style={[styles.alertDot, { backgroundColor: colors.danger }]} />
                   <Text style={styles.alertBadgeText}>
-                    {alerts.lowStockCount} Low Stock
+                    {safeAlerts.lowStockCount} Low Stock
                   </Text>
                 </View>
               )}
-              {alerts.reorderCount > 0 && (
+              {(safeAlerts.reorderCount ?? 0) > 0 && (
                 <View style={styles.alertBadge}>
                   <View style={[styles.alertDot, { backgroundColor: colors.warning }]} />
                   <Text style={styles.alertBadgeText}>
-                    {alerts.reorderCount} Reorder
+                    {safeAlerts.reorderCount} Reorder
                   </Text>
                 </View>
               )}
