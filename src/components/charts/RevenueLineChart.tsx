@@ -7,7 +7,7 @@ import { formatCompactCurrency } from '../../utils/formatters';
 import Card from '../common/Card';
 
 interface RevenueLineChartProps {
-  data?: DailyRevenue[] | null;
+  data?: DailyRevenue[] | Record<string, unknown> | null;
   title?: string;
 }
 
@@ -16,7 +16,24 @@ export const RevenueLineChart: React.FC<RevenueLineChartProps> = ({
   title = 'Revenue Trend',
 }) => {
   const screenWidth = Dimensions.get('window').width - 64;
-  const safeData = data ?? [];
+
+  // Handle both array and wrapped object responses
+  const extractData = (): DailyRevenue[] => {
+    if (!data) return [];
+    if (Array.isArray(data)) return data;
+    // If data is wrapped in an object (e.g., { data: [...] } or { content: [...] })
+    if (typeof data === 'object') {
+      if (Array.isArray((data as Record<string, unknown>).data)) {
+        return (data as Record<string, unknown>).data as DailyRevenue[];
+      }
+      if (Array.isArray((data as Record<string, unknown>).content)) {
+        return (data as Record<string, unknown>).content as DailyRevenue[];
+      }
+    }
+    return [];
+  };
+
+  const safeData = extractData();
 
   if (safeData.length === 0) {
     return (
