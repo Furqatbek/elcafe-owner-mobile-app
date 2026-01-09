@@ -139,14 +139,16 @@ export const ReportsScreen: React.FC = () => {
     if (!plData) return null;
 
     const revenueItems = [
-      { label: 'Sales Revenue', value: plData.salesRevenue },
-      { label: 'Service Fees', value: plData.serviceFeeRevenue },
-      { label: 'Delivery Fees', value: plData.deliveryFeeRevenue },
-      { label: 'Tips', value: plData.tipRevenue },
+      { label: 'Sales Revenue', value: plData.salesRevenue ?? 0 },
+      { label: 'Service Fees', value: plData.serviceFeeRevenue ?? 0 },
+      { label: 'Delivery Fees', value: plData.deliveryFeeRevenue ?? 0 },
+      { label: 'Tips', value: plData.tipRevenue ?? 0 },
     ];
 
-    const expenseEntries = Object.entries(plData.expensesByCategory);
-    const isProfit = plData.netIncome >= 0;
+    const expenseEntries = Object.entries(plData.expensesByCategory ?? {});
+    const totalExpenses = plData.totalExpenses ?? 0;
+    const netIncome = plData.netIncome ?? 0;
+    const isProfit = netIncome >= 0;
 
     return (
       <>
@@ -164,7 +166,7 @@ export const ReportsScreen: React.FC = () => {
             <View style={[styles.lineItem, styles.totalLine]}>
               <Text style={styles.totalLabel}>Total Revenue</Text>
               <Text style={styles.totalValue}>
-                {formatCurrency(plData.totalRevenue)}
+                {formatCurrency(plData.totalRevenue ?? 0)}
               </Text>
             </View>
           </Card>
@@ -180,10 +182,10 @@ export const ReportsScreen: React.FC = () => {
                     style={[
                       styles.expenseBarFill,
                       {
-                        width: `${Math.min(
-                          (amount / plData.totalExpenses) * 100,
+                        width: `${totalExpenses > 0 ? Math.min(
+                          ((amount as number) / totalExpenses) * 100,
                           100
-                        )}%`,
+                        ) : 0}%`,
                       },
                     ]}
                   />
@@ -191,7 +193,7 @@ export const ReportsScreen: React.FC = () => {
                 <View style={styles.expenseDetails}>
                   <Text style={styles.expenseLabel}>{category}</Text>
                   <Text style={styles.expenseValue}>
-                    {formatCurrency(amount)}
+                    {formatCurrency(amount as number)}
                   </Text>
                 </View>
               </View>
@@ -199,7 +201,7 @@ export const ReportsScreen: React.FC = () => {
             <View style={[styles.lineItem, styles.totalLine]}>
               <Text style={styles.totalLabel}>Total Expenses</Text>
               <Text style={[styles.totalValue, { color: colors.danger }]}>
-                {formatCurrency(plData.totalExpenses)}
+                {formatCurrency(totalExpenses)}
               </Text>
             </View>
           </Card>
@@ -221,10 +223,10 @@ export const ReportsScreen: React.FC = () => {
                   { color: isProfit ? colors.success : colors.danger },
                 ]}
               >
-                {formatCurrency(plData.netIncome)}
+                {formatCurrency(netIncome)}
               </Text>
               <Text style={styles.orderCount}>
-                From {formatNumber(plData.orderCount)} orders
+                From {formatNumber(plData.orderCount ?? 0)} orders
               </Text>
             </View>
           </Card>
@@ -242,7 +244,7 @@ export const ReportsScreen: React.FC = () => {
             <Card title="Customer Retention">
               <View style={styles.retentionContainer}>
                 <CircularProgress
-                  percentage={retentionData.retentionRate}
+                  percentage={retentionData.retentionRate ?? 0}
                   size={120}
                   color={colors.success}
                 />
@@ -250,13 +252,13 @@ export const ReportsScreen: React.FC = () => {
                   <View style={styles.retentionStat}>
                     <Text style={styles.retentionStatLabel}>Repeat Rate</Text>
                     <Text style={styles.retentionStatValue}>
-                      {formatPercentage(retentionData.repeatCustomerRate)}
+                      {formatPercentage(retentionData.repeatCustomerRate ?? 0)}
                     </Text>
                   </View>
                   <View style={styles.retentionStat}>
                     <Text style={styles.retentionStatLabel}>Churn Rate</Text>
                     <Text style={[styles.retentionStatValue, { color: colors.danger }]}>
-                      {formatPercentage(retentionData.churnRate)}
+                      {formatPercentage(retentionData.churnRate ?? 0)}
                     </Text>
                   </View>
                 </View>
@@ -272,14 +274,14 @@ export const ReportsScreen: React.FC = () => {
               <View style={[styles.customerCountCard, { backgroundColor: `${colors.success}10` }]}>
                 <Feather name="user-plus" size={24} color={colors.success} />
                 <Text style={[styles.customerCountValue, { color: colors.success }]}>
-                  {formatNumber(retentionData.newCustomers)}
+                  {formatNumber(retentionData.newCustomers ?? 0)}
                 </Text>
                 <Text style={styles.customerCountLabel}>New Customers</Text>
               </View>
               <View style={[styles.customerCountCard, { backgroundColor: `${colors.primary}10` }]}>
                 <Feather name="users" size={24} color={colors.primary} />
                 <Text style={[styles.customerCountValue, { color: colors.primary }]}>
-                  {formatNumber(retentionData.returningCustomers)}
+                  {formatNumber(retentionData.returningCustomers ?? 0)}
                 </Text>
                 <Text style={styles.customerCountLabel}>Returning</Text>
               </View>
@@ -295,14 +297,14 @@ export const ReportsScreen: React.FC = () => {
                 <View style={styles.ltvMain}>
                   <Text style={styles.ltvLabel}>Average LTV</Text>
                   <Text style={styles.ltvValue}>
-                    {formatCurrency(ltvData.averageLTV)}
+                    {formatCurrency(ltvData.averageLTV ?? 0)}
                   </Text>
                 </View>
                 <View style={styles.ltvStats}>
                   <View style={styles.ltvStat}>
                     <Feather name="shopping-cart" size={18} color={colors.primary} />
                     <Text style={styles.ltvStatValue}>
-                      {formatCurrency(ltvData.averageOrderValue)}
+                      {formatCurrency(ltvData.averageOrderValue ?? 0)}
                     </Text>
                     <Text style={styles.ltvStatLabel}>Avg Order</Text>
                   </View>
@@ -310,7 +312,7 @@ export const ReportsScreen: React.FC = () => {
                   <View style={styles.ltvStat}>
                     <Feather name="repeat" size={18} color={colors.primary} />
                     <Text style={styles.ltvStatValue}>
-                      {ltvData.averageOrdersPerCustomer.toFixed(1)}
+                      {(ltvData.averageOrdersPerCustomer ?? 0).toFixed(1)}
                     </Text>
                     <Text style={styles.ltvStatLabel}>Avg Orders/Customer</Text>
                   </View>
