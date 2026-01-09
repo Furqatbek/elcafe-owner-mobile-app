@@ -1,0 +1,212 @@
+export default {
+  // Common
+  common: {
+    loading: 'Загрузка...',
+    error: 'Ошибка',
+    retry: 'Повторить',
+    cancel: 'Отмена',
+    save: 'Сохранить',
+    delete: 'Удалить',
+    edit: 'Редактировать',
+    confirm: 'Подтвердить',
+    back: 'Назад',
+    next: 'Далее',
+    done: 'Готово',
+    search: 'Поиск',
+    noData: 'Нет данных',
+    pullToRefresh: 'Потяните для обновления',
+    seeAll: 'Все',
+    viewAll: 'Показать все',
+  },
+
+  // Navigation
+  navigation: {
+    home: 'Главная',
+    analytics: 'Аналитика',
+    inventory: 'Склад',
+    reports: 'Отчёты',
+    alerts: 'Оповещения',
+  },
+
+  // Login Screen
+  login: {
+    title: 'Добро пожаловать',
+    subtitle: 'Войдите в панель управления рестораном',
+    email: 'Email',
+    emailPlaceholder: 'Введите ваш email',
+    password: 'Пароль',
+    passwordPlaceholder: 'Введите ваш пароль',
+    signIn: 'Войти',
+    signingIn: 'Вход...',
+    forgotPassword: 'Забыли пароль?',
+    invalidCredentials: 'Неверный email или пароль',
+    networkError: 'Ошибка сети. Попробуйте снова.',
+  },
+
+  // Home Screen
+  home: {
+    greeting: '{{timeOfDay}}',
+    todayOverview: 'Обзор за сегодня',
+    quickStats: 'Краткая статистика',
+    recentOrders: 'Последние заказы',
+    topSelling: 'Топ продаж',
+    inventoryAlerts: 'Оповещения о запасах',
+    viewDashboard: 'Панель управления',
+    revenue: 'Выручка',
+    orders: 'Заказы',
+    avgOrder: 'Средний чек',
+    profit: 'Прибыль',
+    morning: 'Доброе утро',
+    afternoon: 'Добрый день',
+    evening: 'Добрый вечер',
+  },
+
+  // Analytics Screen
+  analytics: {
+    title: 'Аналитика',
+    subtitle: 'Бизнес-аналитика',
+    revenueTrend: 'Динамика выручки',
+    salesByCategory: 'Продажи по категориям',
+    peakHours: 'Часы пик',
+    topSellingItems: 'Топ продаж',
+    revenueByType: 'Выручка по типам',
+    total: 'Всего',
+    dailyAvg: 'Средняя/день',
+    peakTime: 'Пиковое время',
+    busiestHours: 'Самые загруженные часы',
+    dateRange: 'Период',
+    last7Days: 'Последние 7 дней',
+    last30Days: 'Последние 30 дней',
+    thisMonth: 'Этот месяц',
+    lastMonth: 'Прошлый месяц',
+    custom: 'Выбрать',
+  },
+
+  // Inventory Screen
+  inventory: {
+    title: 'Склад',
+    subtitle: 'Управление запасами',
+    stockAlerts: 'Оповещения о запасах',
+    allItems: 'Все товары',
+    critical: 'Критично',
+    lowStock: 'Мало',
+    reorder: 'Заказать',
+    inStock: 'В наличии',
+    inventoryMetrics: 'Показатели склада',
+    turnoverRatio: 'Оборачиваемость',
+    daysToSell: 'Дней до продажи',
+    currentStock: 'Текущий запас',
+    minStock: 'Мин. запас',
+    healthyInventory: 'Запасы в норме',
+    noAlerts: 'Нет оповещений о запасах',
+  },
+
+  // Reports Screen
+  reports: {
+    title: 'Отчёты',
+    subtitle: 'Финансовая аналитика',
+    profitLoss: 'Прибыли и убытки',
+    customers: 'Клиенты',
+    revenueBreakdown: 'Структура выручки',
+    expensesByCategory: 'Расходы по категориям',
+    netIncome: 'Чистая прибыль',
+    totalRevenue: 'Общая выручка',
+    totalExpenses: 'Общие расходы',
+    fromOrders: 'Из {{count}} заказов',
+    salesRevenue: 'Выручка от продаж',
+    serviceFees: 'Сервисный сбор',
+    deliveryFees: 'Доставка',
+    tips: 'Чаевые',
+    customerRetention: 'Удержание клиентов',
+    repeatRate: 'Повторные покупки',
+    churnRate: 'Отток клиентов',
+    newCustomers: 'Новые клиенты',
+    returningCustomers: 'Вернувшиеся',
+    customerLifetimeValue: 'Пожизненная ценность клиента',
+    averageLTV: 'Средний LTV',
+    avgOrderValue: 'Средний чек',
+    avgOrdersPerCustomer: 'Заказов/клиент',
+  },
+
+  // Alerts Screen
+  alerts: {
+    title: 'Уведомления',
+    subtitle: '{{count}} уведомлений',
+    markAllRead: 'Прочитать все',
+    noNotifications: 'Нет уведомлений',
+    allCaughtUp: 'Вы всё прочитали! Загляните позже.',
+    loadingNotifications: 'Загрузка уведомлений...',
+    unableToLoad: 'Не удалось загрузить уведомления',
+    stockAlert: 'Оповещение о запасах',
+    lowStockAlert: 'Низкий запас',
+    financialAlert: 'Финансы',
+    orderAlert: 'Заказ',
+    systemAlert: 'Система',
+  },
+
+  // Settings
+  settings: {
+    title: 'Настройки',
+    language: 'Язык',
+    selectLanguage: 'Выберите язык',
+    english: 'Английский',
+    russian: 'Русский',
+    uzbek: 'Узбекский',
+    notifications: 'Уведомления',
+    pushNotifications: 'Push-уведомления',
+    emailNotifications: 'Email-уведомления',
+    account: 'Аккаунт',
+    profile: 'Профиль',
+    security: 'Безопасность',
+    logout: 'Выйти',
+    logoutConfirm: 'Вы уверены, что хотите выйти?',
+    version: 'Версия',
+  },
+
+  // Time & Date
+  time: {
+    justNow: 'только что',
+    minutesAgo: '{{count}} мин назад',
+    hoursAgo: '{{count}} ч назад',
+    daysAgo: '{{count}} дн назад',
+    today: 'Сегодня',
+    yesterday: 'Вчера',
+  },
+
+  // Trends & Statistics
+  trends: {
+    up: 'Рост',
+    down: 'Падение',
+    stable: 'Стабильно',
+    vsLastPeriod: 'к прошлому периоду',
+    change: 'Изменение',
+    growth: 'Рост',
+    decline: 'Снижение',
+  },
+
+  // Currency & Numbers
+  format: {
+    currency: '{{value}}',
+    percentage: '{{value}}%',
+    items: '{{count}} товаров',
+    sold: '{{count}} продано',
+  },
+
+  // Errors
+  errors: {
+    generic: 'Что-то пошло не так',
+    network: 'Ошибка сети. Проверьте подключение.',
+    timeout: 'Превышено время ожидания. Попробуйте снова.',
+    unauthorized: 'Сессия истекла. Войдите снова.',
+    notFound: 'Ресурс не найден',
+    serverError: 'Ошибка сервера. Попробуйте позже.',
+  },
+
+  // Card Titles
+  cards: {
+    financialSummary: 'Финансовая сводка',
+    orderStats: 'Статистика заказов',
+    trendAnalysis: 'Анализ трендов',
+    cogsAnalysis: 'Себестоимость товаров',
+  },
+};

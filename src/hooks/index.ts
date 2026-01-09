@@ -14,3 +14,4 @@ export {
   useMarkAsRead,
   useMarkAllAsRead,
 } from './useNotifications';
+export { useTranslation } from './useTranslation';

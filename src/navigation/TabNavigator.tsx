@@ -10,6 +10,7 @@ import {
   AlertsScreen,
 } from '../screens';
 import { useNotificationStore } from '../store';
+import { useTranslation } from '../hooks/useTranslation';
 import { colors } from '../utils/colors';
 
 export type TabParamList = {
@@ -47,6 +48,7 @@ const TabIcon: React.FC<TabIconProps> = ({ name, focused, color, badge }) => (
 
 export const TabNavigator: React.FC = () => {
   const unreadCount = useNotificationStore((state) => state.unreadCount);
+  const { t } = useTranslation();
 
   return (
     <Tab.Navigator
@@ -63,6 +65,7 @@ export const TabNavigator: React.FC = () => {
         name="Home"
         component={HomeScreen}
         options={{
+          tabBarLabel: t('navigation.home'),
           tabBarIcon: ({ focused, color }) => (
             <TabIcon name="home" focused={focused} color={color} />
           ),
@@ -72,6 +75,7 @@ export const TabNavigator: React.FC = () => {
         name="Analytics"
         component={AnalyticsScreen}
         options={{
+          tabBarLabel: t('navigation.analytics'),
           tabBarIcon: ({ focused, color }) => (
             <TabIcon name="bar-chart-2" focused={focused} color={color} />
           ),
@@ -81,6 +85,7 @@ export const TabNavigator: React.FC = () => {
         name="Inventory"
         component={InventoryScreen}
         options={{
+          tabBarLabel: t('navigation.inventory'),
           tabBarIcon: ({ focused, color }) => (
             <TabIcon name="package" focused={focused} color={color} />
           ),
@@ -90,6 +95,7 @@ export const TabNavigator: React.FC = () => {
         name="Reports"
         component={ReportsScreen}
         options={{
+          tabBarLabel: t('navigation.reports'),
           tabBarIcon: ({ focused, color }) => (
             <TabIcon name="file-text" focused={focused} color={color} />
           ),
@@ -99,6 +105,7 @@ export const TabNavigator: React.FC = () => {
         name="Alerts"
         component={AlertsScreen}
         options={{
+          tabBarLabel: t('navigation.alerts'),
           tabBarIcon: ({ focused, color }) => (
             <TabIcon
               name="bell"

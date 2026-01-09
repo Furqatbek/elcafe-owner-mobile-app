@@ -14,6 +14,8 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useAuthStore } from '../store';
+import { useTranslation } from '../hooks/useTranslation';
+import { LanguageSelector } from '../components/common';
 import { colors } from '../utils/colors';
 
 export const LoginScreen: React.FC = () => {
@@ -24,18 +26,19 @@ export const LoginScreen: React.FC = () => {
   const [errors, setErrors] = useState<{ email?: string; password?: string }>({});
 
   const login = useAuthStore((state) => state.login);
+  const { t } = useTranslation();
 
   const validateForm = (): boolean => {
     const newErrors: { email?: string; password?: string } = {};
 
     if (!email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = t('login.email') + ' is required';
     } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
       newErrors.email = 'Please enter a valid email';
     }
 
     if (!password) {
-      newErrors.password = 'Password is required';
+      newErrors.password = t('login.password') + ' is required';
     } else if (password.length < 6) {
       newErrors.password = 'Password must be at least 6 characters';
     }
@@ -54,8 +57,8 @@ export const LoginScreen: React.FC = () => {
       const message =
         error?.response?.data?.message ||
         error?.message ||
-        'Login failed. Please check your credentials.';
-      Alert.alert('Login Failed', message);
+        t('login.invalidCredentials');
+      Alert.alert(t('common.error'), message);
     } finally {
       setIsLoading(false);
     }
@@ -72,14 +75,19 @@ export const LoginScreen: React.FC = () => {
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >
+          {/* Language Selector */}
+          <View style={styles.languageContainer}>
+            <LanguageSelector compact />
+          </View>
+
           {/* Logo & Header */}
           <View style={styles.header}>
             <View style={styles.logoContainer}>
               <Feather name="coffee" size={48} color={colors.primary} />
             </View>
-            <Text style={styles.title}>ElCafe Owner</Text>
+            <Text style={styles.title}>{t('login.title')}</Text>
             <Text style={styles.subtitle}>
-              Sign in to access your restaurant dashboard
+              {t('login.subtitle')}
             </Text>
           </View>
 
@@ -87,7 +95,7 @@ export const LoginScreen: React.FC = () => {
           <View style={styles.form}>
             {/* Email Input */}
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Email</Text>
+              <Text style={styles.label}>{t('login.email')}</Text>
               <View
                 style={[
                   styles.inputContainer,
@@ -102,7 +110,7 @@ export const LoginScreen: React.FC = () => {
                 />
                 <TextInput
                   style={styles.input}
-                  placeholder="Enter your email"
+                  placeholder={t('login.emailPlaceholder')}
                   placeholderTextColor={colors.textMuted}
                   value={email}
                   onChangeText={(text) => {
@@ -123,7 +131,7 @@ export const LoginScreen: React.FC = () => {
 
             {/* Password Input */}
             <View style={styles.inputGroup}>
-              <Text style={styles.label}>Password</Text>
+              <Text style={styles.label}>{t('login.password')}</Text>
               <View
                 style={[
                   styles.inputContainer,
@@ -138,7 +146,7 @@ export const LoginScreen: React.FC = () => {
                 />
                 <TextInput
                   style={styles.input}
-                  placeholder="Enter your password"
+                  placeholder={t('login.passwordPlaceholder')}
                   placeholderTextColor={colors.textMuted}
                   value={password}
                   onChangeText={(text) => {
@@ -179,7 +187,7 @@ export const LoginScreen: React.FC = () => {
                 <ActivityIndicator color={colors.white} size="small" />
               ) : (
                 <>
-                  <Text style={styles.loginButtonText}>Sign In</Text>
+                  <Text style={styles.loginButtonText}>{t('login.signIn')}</Text>
                   <Feather name="arrow-right" size={20} color={colors.white} />
                 </>
               )}
@@ -212,6 +220,11 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: 24,
     paddingVertical: 40,
+  },
+  languageContainer: {
+    position: 'absolute',
+    top: 16,
+    right: 0,
   },
   header: {
     alignItems: 'center',

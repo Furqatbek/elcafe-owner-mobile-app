@@ -12,6 +12,7 @@ import {
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
 import { useDashboard } from '../hooks/useDashboard';
+import { useTranslation } from '../hooks/useTranslation';
 import { useAuthStore } from '../store';
 import { PeriodType } from '../types/api.types';
 import { colors } from '../utils/colors';
@@ -21,6 +22,7 @@ import {
   LoadingState,
   ErrorState,
   SkeletonCard,
+  LanguageSelector,
 } from '../components/common';
 import {
   FinancialSummaryCard,
@@ -36,6 +38,7 @@ export const HomeScreen: React.FC = () => {
   const [period, setPeriod] = useState<PeriodType>('today');
   const { data, isLoading, isError, refetch, isRefetching } = useDashboard(period);
   const { user, logout } = useAuthStore();
+  const { t } = useTranslation();
 
   const handleRefresh = useCallback(() => {
     refetch();
@@ -47,30 +50,28 @@ export const HomeScreen: React.FC = () => {
 
   const handleLogout = useCallback(() => {
     Alert.alert(
-      'Logout',
-      'Are you sure you want to logout?',
+      t('settings.logout'),
+      t('settings.logoutConfirm'),
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Logout',
+          text: t('settings.logout'),
           style: 'destructive',
           onPress: () => logout(),
         },
       ]
     );
-  }, [logout]);
+  }, [logout, t]);
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return t('home.morning');
+    if (hour < 18) return t('home.afternoon');
+    return t('home.evening');
+  };
 
   const getPeriodTitle = () => {
-    switch (period) {
-      case 'today':
-        return "Today's Overview";
-      case 'week':
-        return "This Week's Overview";
-      case 'month':
-        return "This Month's Overview";
-      default:
-        return 'Overview';
-    }
+    return t('home.todayOverview');
   };
 
   const renderContent = () => {
@@ -158,19 +159,22 @@ export const HomeScreen: React.FC = () => {
           <View style={styles.headerTop}>
             <View style={styles.greeting}>
               <Text style={styles.greetingText}>
-                Hello, {user?.firstName || 'Owner'}
+                {getGreeting()}, {user?.firstName || 'Owner'}
               </Text>
               <Text style={styles.date}>
                 {formatDate(new Date().toISOString(), 'long')}
               </Text>
             </View>
-            <TouchableOpacity
-              style={styles.logoutButton}
-              onPress={handleLogout}
-              activeOpacity={0.7}
-            >
-              <Feather name="log-out" size={20} color={colors.danger} />
-            </TouchableOpacity>
+            <View style={styles.headerActions}>
+              <LanguageSelector compact />
+              <TouchableOpacity
+                style={styles.logoutButton}
+                onPress={handleLogout}
+                activeOpacity={0.7}
+              >
+                <Feather name="log-out" size={20} color={colors.danger} />
+              </TouchableOpacity>
+            </View>
           </View>
           <Text style={styles.title}>{getPeriodTitle()}</Text>
         </View>
@@ -216,6 +220,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
     color: colors.textSecondary,
     marginBottom: 2,
+  },
+  headerActions: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 8,
   },
   logoutButton: {
     width: 40,

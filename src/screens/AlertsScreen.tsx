@@ -15,6 +15,7 @@ import {
   useMarkAsRead,
   useMarkAllAsRead,
 } from '../hooks/useNotifications';
+import { useTranslation } from '../hooks/useTranslation';
 import { Notification } from '../types/api.types';
 import { colors } from '../utils/colors';
 import { formatRelativeTime } from '../utils/formatters';
@@ -106,6 +107,7 @@ export const AlertsScreen: React.FC = () => {
 
   const { mutate: markAsRead } = useMarkAsRead();
   const { mutate: markAllAsRead, isPending: isMarkingAll } = useMarkAllAsRead();
+  const { t } = useTranslation();
 
   const handleRefresh = useCallback(() => {
     refetch();
@@ -124,17 +126,17 @@ export const AlertsScreen: React.FC = () => {
 
   const handleMarkAllRead = useCallback(() => {
     Alert.alert(
-      'Mark All as Read',
-      'Are you sure you want to mark all notifications as read?',
+      t('alerts.markAllRead'),
+      t('alerts.markAllRead') + '?',
       [
-        { text: 'Cancel', style: 'cancel' },
+        { text: t('common.cancel'), style: 'cancel' },
         {
-          text: 'Mark All Read',
+          text: t('alerts.markAllRead'),
           onPress: () => markAllAsRead(),
         },
       ]
     );
-  }, [markAllAsRead]);
+  }, [markAllAsRead, t]);
 
   const renderItem = useCallback(
     ({ item }: { item: Notification }) => (
@@ -155,9 +157,9 @@ export const AlertsScreen: React.FC = () => {
     return (
       <View style={styles.header}>
         <View>
-          <Text style={styles.title}>Notifications</Text>
+          <Text style={styles.title}>{t('alerts.title')}</Text>
           <Text style={styles.subtitle}>
-            {data?.totalElements ?? 0} notifications
+            {t('alerts.subtitle', { count: data?.totalElements ?? 0 })}
           </Text>
         </View>
         {hasUnread && (
@@ -177,7 +179,7 @@ export const AlertsScreen: React.FC = () => {
                 isMarkingAll && { color: colors.textMuted },
               ]}
             >
-              Mark all read
+              {t('alerts.markAllRead')}
             </Text>
           </TouchableOpacity>
         )}
@@ -188,8 +190,8 @@ export const AlertsScreen: React.FC = () => {
   const renderEmpty = () => (
     <EmptyState
       icon="bell-off"
-      title="No Notifications"
-      message="You're all caught up! Check back later for updates."
+      title={t('alerts.noNotifications')}
+      message={t('alerts.allCaughtUp')}
       iconColor={colors.textSecondary}
     />
   );
@@ -198,7 +200,7 @@ export const AlertsScreen: React.FC = () => {
     return (
       <SafeAreaView style={styles.container}>
         {renderHeader()}
-        <LoadingState message="Loading notifications..." />
+        <LoadingState message={t('alerts.loadingNotifications')} />
       </SafeAreaView>
     );
   }
@@ -208,7 +210,7 @@ export const AlertsScreen: React.FC = () => {
       <SafeAreaView style={styles.container}>
         {renderHeader()}
         <ErrorState
-          message="Unable to load notifications"
+          message={t('alerts.unableToLoad')}
           onRetry={refetch}
           fullScreen
         />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
@@ -7,7 +7,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { RootNavigator } from './src/navigation';
 import { useAuth } from './src/hooks';
 import { useUnreadCount } from './src/hooks/useNotifications';
-import { useAuthStore } from './src/store';
+import { useAuthStore, useLanguageStore } from './src/store';
 import { colors } from './src/utils/colors';
 
 // Create a QueryClient instance
@@ -33,9 +33,16 @@ const NotificationsFetcher: React.FC = () => {
 
 // Component to handle initial data fetching and auth
 const AppContent: React.FC = () => {
-  const { isLoading } = useAuth();
+  const { isLoading: isAuthLoading } = useAuth();
+  const initializeLanguage = useLanguageStore((state) => state.initialize);
+  const isLanguageLoading = useLanguageStore((state) => state.isLoading);
+  const [languageInitialized, setLanguageInitialized] = useState(false);
 
-  if (isLoading) {
+  useEffect(() => {
+    initializeLanguage().then(() => setLanguageInitialized(true));
+  }, [initializeLanguage]);
+
+  if (isAuthLoading || !languageInitialized) {
     return (
       <View style={styles.loadingContainer}>
         <ActivityIndicator size="large" color={colors.primary} />
