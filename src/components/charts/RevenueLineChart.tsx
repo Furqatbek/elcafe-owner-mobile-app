@@ -89,10 +89,10 @@ export const RevenueLineChart: React.FC<RevenueLineChartProps> = ({
         withHorizontalLabels={true}
         withVerticalLabels={true}
         fromZero
-        yAxisLabel="$"
+        yAxisLabel=""
         yAxisSuffix=""
         style={styles.chart}
-        formatYLabel={(value) => formatCompactCurrency(Number(value)).replace('$', '')}
+        formatYLabel={(value) => formatCompactCurrency(Number(value))}
       />
     </Card>
   );

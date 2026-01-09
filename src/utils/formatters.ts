@@ -1,40 +1,34 @@
 /**
- * Format a number as currency
+ * Format a number as currency (without currency symbol)
  * @param value - The number to format
- * @param currency - Currency code (default: USD)
  * @param locale - Locale string (default: en-US)
  */
 export const formatCurrency = (
   value: number | undefined | null,
-  currency: string = 'USD',
   locale: string = 'en-US'
 ): string => {
   const safeValue = value ?? 0;
   return new Intl.NumberFormat(locale, {
-    style: 'currency',
-    currency,
     minimumFractionDigits: 2,
     maximumFractionDigits: 2,
   }).format(safeValue);
 };
 
 /**
- * Format a number as compact currency (e.g., $1.2K, $1.5M)
+ * Format a number as compact currency (e.g., 1.2K, 1.5M)
  * @param value - The number to format
- * @param currency - Currency code (default: USD)
  */
 export const formatCompactCurrency = (
-  value: number | undefined | null,
-  currency: string = 'USD'
+  value: number | undefined | null
 ): string => {
   const safeValue = value ?? 0;
   if (Math.abs(safeValue) >= 1000000) {
-    return `$${(safeValue / 1000000).toFixed(1)}M`;
+    return `${(safeValue / 1000000).toFixed(1)}M`;
   }
   if (Math.abs(safeValue) >= 1000) {
-    return `$${(safeValue / 1000).toFixed(1)}K`;
+    return `${(safeValue / 1000).toFixed(1)}K`;
   }
-  return formatCurrency(safeValue, currency);
+  return formatCurrency(safeValue);
 };
 
 /**
