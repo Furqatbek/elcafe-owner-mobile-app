@@ -113,7 +113,8 @@ export const AlertsScreen: React.FC = () => {
 
   const handleNotificationPress = useCallback(
     (id: number) => {
-      const notification = data?.content.find((n) => n.id === id);
+      const notifications = data?.content ?? [];
+      const notification = notifications.find((n) => n.id === id);
       if (notification && !notification.read) {
         markAsRead(id);
       }
@@ -148,14 +149,15 @@ export const AlertsScreen: React.FC = () => {
   );
 
   const renderHeader = () => {
-    const hasUnread = data?.content.some((n) => !n.read);
+    const notifications = data?.content ?? [];
+    const hasUnread = notifications.some((n) => !n.read);
 
     return (
       <View style={styles.header}>
         <View>
           <Text style={styles.title}>Notifications</Text>
           <Text style={styles.subtitle}>
-            {data?.totalElements || 0} notifications
+            {data?.totalElements ?? 0} notifications
           </Text>
         </View>
         {hasUnread && (
