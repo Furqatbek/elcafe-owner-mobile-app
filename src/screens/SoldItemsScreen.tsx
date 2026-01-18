@@ -58,44 +58,46 @@ export const SoldItemsScreen: React.FC = () => {
       <ScrollView
         style={styles.scrollView}
         contentContainerStyle={styles.scrollContent}
-        showsVerticalScrollIndicator={false}
+        showsVerticalScrollIndicator={true}
       >
-        {items.map((item, index) => (
-          <View
-            key={item.productName}
-            style={[
-              styles.itemRow,
-              index < items.length - 1 && styles.itemBorder,
-            ]}
-          >
-            <View style={[styles.rankBadge, { backgroundColor: `${getMedalColor(index)}20` }]}>
-              <Text style={[styles.rankText, { color: getMedalColor(index) }]}>
-                #{index + 1}
-              </Text>
-            </View>
-            <View style={styles.itemInfo}>
-              <Text style={styles.itemName} numberOfLines={1}>
-                {item.productName}
-              </Text>
-              <View style={styles.itemMeta}>
-                <Text style={styles.itemQuantity}>
-                  {t('format.sold', { count: item.quantitySold })}
+        <View style={styles.card}>
+          {items.map((item, index) => (
+            <View
+              key={item.productName}
+              style={[
+                styles.itemRow,
+                index < items.length - 1 && styles.itemBorder,
+              ]}
+            >
+              <View style={[styles.rankBadge, { backgroundColor: `${getMedalColor(index)}20` }]}>
+                <Text style={[styles.rankText, { color: getMedalColor(index) }]}>
+                  #{index + 1}
                 </Text>
-                {item.profitMargin != null && (
-                  <View style={styles.marginBadge}>
-                    <Feather name="trending-up" size={10} color={colors.success} />
-                    <Text style={styles.marginText}>
-                      {formatPercentage(item.profitMargin)}
-                    </Text>
-                  </View>
-                )}
               </View>
+              <View style={styles.itemInfo}>
+                <Text style={styles.itemName} numberOfLines={1}>
+                  {item.productName}
+                </Text>
+                <View style={styles.itemMeta}>
+                  <Text style={styles.itemQuantity}>
+                    {t('format.sold', { count: item.quantitySold })}
+                  </Text>
+                  {item.profitMargin != null && (
+                    <View style={styles.marginBadge}>
+                      <Feather name="trending-up" size={10} color={colors.success} />
+                      <Text style={styles.marginText}>
+                        {formatPercentage(item.profitMargin)}
+                      </Text>
+                    </View>
+                  )}
+                </View>
+              </View>
+              <Text style={styles.itemRevenue}>
+                {formatCurrency(item.totalRevenue)}
+              </Text>
             </View>
-            <Text style={styles.itemRevenue}>
-              {formatCurrency(item.totalRevenue)}
-            </Text>
-          </View>
-        ))}
+          ))}
+        </View>
       </ScrollView>
     </SafeAreaView>
   );
@@ -137,9 +139,12 @@ const styles = StyleSheet.create({
   },
   scrollContent: {
     padding: 16,
+    paddingBottom: 32,
+  },
+  card: {
     backgroundColor: colors.white,
-    margin: 16,
     borderRadius: 16,
+    padding: 16,
   },
   itemRow: {
     flexDirection: 'row',
