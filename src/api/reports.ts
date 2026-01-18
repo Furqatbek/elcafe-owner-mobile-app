@@ -5,6 +5,7 @@ import {
   CustomerRetention,
   CustomerLTV,
   DateRange,
+  ApiResponse,
 } from '../types/api.types';
 
 export const reportsApi = {
@@ -12,7 +13,7 @@ export const reportsApi = {
     restaurantId: number,
     dateRange: DateRange
   ): Promise<ProfitLossReport> => {
-    const response = await apiClient.get<ProfitLossReport>(
+    const response = await apiClient.get<ApiResponse<ProfitLossReport>>(
       '/api/v1/financial/reports/profit-loss',
       {
         params: {
@@ -22,14 +23,14 @@ export const reportsApi = {
         },
       }
     );
-    return response.data;
+    return response.data.data;
   },
 
   getCOGSReport: async (
     restaurantId: number,
     dateRange: DateRange
   ): Promise<COGSReport> => {
-    const response = await apiClient.get<COGSReport>(
+    const response = await apiClient.get<ApiResponse<COGSReport>>(
       '/api/v1/financial/reports/cogs',
       {
         params: {
@@ -39,14 +40,14 @@ export const reportsApi = {
         },
       }
     );
-    return response.data;
+    return response.data.data;
   },
 
   getCustomerRetention: async (
     restaurantId: number,
     dateRange: DateRange
   ): Promise<CustomerRetention> => {
-    const response = await apiClient.get<CustomerRetention>(
+    const response = await apiClient.get<ApiResponse<CustomerRetention>>(
       '/api/v1/analytics/customer/retention',
       {
         params: {
@@ -56,17 +57,17 @@ export const reportsApi = {
         },
       }
     );
-    return response.data;
+    return response.data.data;
   },
 
   getCustomerLTV: async (restaurantId: number): Promise<CustomerLTV> => {
-    const response = await apiClient.get<CustomerLTV>(
+    const response = await apiClient.get<ApiResponse<CustomerLTV>>(
       '/api/v1/analytics/customer/ltv',
       {
         params: { restaurantId },
       }
     );
-    return response.data;
+    return response.data.data;
   },
 };
 

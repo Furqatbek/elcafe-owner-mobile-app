@@ -5,6 +5,7 @@ import {
   PeakHoursData,
   CategorySales,
   DateRange,
+  ApiResponse,
 } from '../types/api.types';
 
 export const analyticsApi = {
@@ -12,7 +13,7 @@ export const analyticsApi = {
     restaurantId: number,
     dateRange: DateRange
   ): Promise<DailyRevenue[]> => {
-    const response = await apiClient.get<DailyRevenue[]>(
+    const response = await apiClient.get<ApiResponse<DailyRevenue[]>>(
       '/api/v1/analytics/financial/daily-revenue',
       {
         params: {
@@ -22,14 +23,14 @@ export const analyticsApi = {
         },
       }
     );
-    return response.data;
+    return response.data.data;
   },
 
   getCOGS: async (
     restaurantId: number,
     dateRange: DateRange
   ): Promise<COGSData> => {
-    const response = await apiClient.get<COGSData>(
+    const response = await apiClient.get<ApiResponse<COGSData>>(
       '/api/v1/analytics/financial/cogs',
       {
         params: {
@@ -39,14 +40,14 @@ export const analyticsApi = {
         },
       }
     );
-    return response.data;
+    return response.data.data;
   },
 
   getPeakHours: async (
     restaurantId: number,
     dateRange: DateRange
   ): Promise<PeakHoursData> => {
-    const response = await apiClient.get<PeakHoursData>(
+    const response = await apiClient.get<ApiResponse<PeakHoursData>>(
       '/api/v1/analytics/operational/peak-hours',
       {
         params: {
@@ -56,14 +57,14 @@ export const analyticsApi = {
         },
       }
     );
-    return response.data;
+    return response.data.data;
   },
 
   getSalesByCategory: async (
     restaurantId: number,
     dateRange: DateRange
   ): Promise<CategorySales[]> => {
-    const response = await apiClient.get<CategorySales[]>(
+    const response = await apiClient.get<ApiResponse<CategorySales[]>>(
       '/api/v1/analytics/financial/sales-by-category',
       {
         params: {
@@ -73,7 +74,7 @@ export const analyticsApi = {
         },
       }
     );
-    return response.data;
+    return response.data.data;
   },
 };
 

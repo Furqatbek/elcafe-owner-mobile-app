@@ -97,6 +97,8 @@ export interface DailyRevenue {
 }
 
 export interface COGSData {
+  startDate: string;
+  endDate: string;
   totalCOGS: number;
   totalRevenue: number;
   foodCostPercentage: number;

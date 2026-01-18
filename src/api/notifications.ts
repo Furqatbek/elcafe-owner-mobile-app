@@ -1,5 +1,5 @@
 import apiClient from './client';
-import { NotificationsResponse, UnreadCountResponse } from '../types/api.types';
+import { NotificationsResponse, UnreadCountResponse, ApiResponse } from '../types/api.types';
 
 export const notificationsApi = {
   getNotifications: async (
@@ -7,7 +7,7 @@ export const notificationsApi = {
     page: number = 0,
     size: number = 50
   ): Promise<NotificationsResponse> => {
-    const response = await apiClient.get<NotificationsResponse>(
+    const response = await apiClient.get<ApiResponse<NotificationsResponse>>(
       '/api/v1/notifications',
       {
         params: {
@@ -18,11 +18,11 @@ export const notificationsApi = {
         },
       }
     );
-    return response.data;
+    return response.data.data;
   },
 
   getUnreadCount: async (userId: number): Promise<number> => {
-    const response = await apiClient.get<UnreadCountResponse>(
+    const response = await apiClient.get<ApiResponse<UnreadCountResponse>>(
       '/api/v1/notifications/unread/count',
       {
         params: {
@@ -31,7 +31,7 @@ export const notificationsApi = {
         },
       }
     );
-    return response.data.count;
+    return response.data.data.count;
   },
 
   markAsRead: async (notificationId: number): Promise<void> => {
