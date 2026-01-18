@@ -11,10 +11,12 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useDashboard } from '../hooks/useDashboard';
 import { useTranslation } from '../hooks/useTranslation';
 import { useAuthStore } from '../store';
 import { PeriodType } from '../types/api.types';
+import { RootStackParamList } from '../navigation/RootNavigator';
 import { colors } from '../utils/colors';
 import { formatDate } from '../utils/formatters';
 import {
@@ -34,7 +36,7 @@ import {
 import { RevenueByTypeChart } from '../components/charts';
 
 export const HomeScreen: React.FC = () => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [period, setPeriod] = useState<PeriodType>('today');
   const { data, isLoading, isError, refetch, isRefetching } = useDashboard(period);
   const { user, logout } = useAuthStore();
@@ -47,6 +49,12 @@ export const HomeScreen: React.FC = () => {
   const handleInventoryPress = useCallback(() => {
     (navigation as any).navigate('Inventory');
   }, [navigation]);
+
+  const handleShowMoreSoldItems = useCallback(() => {
+    if (data?.soldItems) {
+      navigation.navigate('SoldItems', { items: data.soldItems });
+    }
+  }, [navigation, data?.soldItems]);
 
   const handleLogout = useCallback(() => {
     Alert.alert(
@@ -126,7 +134,10 @@ export const HomeScreen: React.FC = () => {
 
         {/* Top Selling Items */}
         <View style={styles.section}>
-          <TopSellingItemsCard items={data.soldItems} limit={3} />
+          <TopSellingItemsCard
+            items={data.soldItems}
+            onShowMore={handleShowMoreSoldItems}
+          />
         </View>
 
         {/* Inventory Alert */}

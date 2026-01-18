@@ -17,6 +17,7 @@ export default {
     pullToRefresh: 'Потяните для обновления',
     seeAll: 'Все',
     viewAll: 'Показать все',
+    showMore: 'Показать ещё',
     owner: 'Владелец',
     expenses: 'Расходы',
     current: 'Текущий',

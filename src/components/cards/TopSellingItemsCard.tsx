@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { colors } from '../../utils/colors';
 import { SoldItem } from '../../types/api.types';
@@ -7,12 +7,16 @@ import { formatCurrency, formatPercentage } from '../../utils/formatters';
 import Card from '../common/Card';
 import { useTranslation } from '../../hooks/useTranslation';
 
+const MAX_ITEMS = 5;
+
 interface TopSellingItemsCardProps {
   items?: SoldItem[] | null;
+  onShowMore?: () => void;
 }
 
 export const TopSellingItemsCard: React.FC<TopSellingItemsCardProps> = ({
   items,
+  onShowMore,
 }) => {
   const { t } = useTranslation();
   const safeItems = items ?? [];
@@ -25,6 +29,8 @@ export const TopSellingItemsCard: React.FC<TopSellingItemsCardProps> = ({
     );
   }
 
+  const displayItems = safeItems.slice(0, MAX_ITEMS);
+  const hasMore = safeItems.length > MAX_ITEMS;
   const cardTitle = t('analytics.soldItemsCount', { count: safeItems.length });
 
   const getMedalColor = (index: number): string => {
@@ -42,12 +48,12 @@ export const TopSellingItemsCard: React.FC<TopSellingItemsCardProps> = ({
 
   return (
     <Card title={cardTitle}>
-      {safeItems.map((item, index) => (
+      {displayItems.map((item, index) => (
         <View
           key={item.productName}
           style={[
             styles.itemRow,
-            index < safeItems.length - 1 && styles.itemBorder,
+            index < displayItems.length - 1 && styles.itemBorder,
           ]}
         >
           <View style={[styles.rankBadge, { backgroundColor: `${getMedalColor(index)}20` }]}>
@@ -78,6 +84,12 @@ export const TopSellingItemsCard: React.FC<TopSellingItemsCardProps> = ({
           </Text>
         </View>
       ))}
+      {hasMore && onShowMore && (
+        <TouchableOpacity style={styles.showMoreButton} onPress={onShowMore}>
+          <Text style={styles.showMoreText}>{t('common.showMore')}</Text>
+          <Feather name="chevron-right" size={16} color={colors.primary} />
+        </TouchableOpacity>
+      )}
     </Card>
   );
 };
@@ -147,6 +159,21 @@ const styles = StyleSheet.create({
     color: colors.textSecondary,
     textAlign: 'center',
     paddingVertical: 20,
+  },
+  showMoreButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+    marginTop: 8,
+    borderTopWidth: 1,
+    borderTopColor: colors.border,
+    gap: 4,
+  },
+  showMoreText: {
+    fontSize: 14,
+    fontWeight: '600',
+    color: colors.primary,
   },
 });
 

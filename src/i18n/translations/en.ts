@@ -17,6 +17,7 @@ export default {
     pullToRefresh: 'Pull to refresh',
     seeAll: 'See All',
     viewAll: 'View All',
+    showMore: 'Show More',
     owner: 'Owner',
     expenses: 'Expenses',
     current: 'Current',

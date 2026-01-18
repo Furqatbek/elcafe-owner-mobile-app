@@ -17,6 +17,7 @@ export default {
     pullToRefresh: 'Yangilash uchun torting',
     seeAll: 'Barchasi',
     viewAll: "Barchasini ko'rish",
+    showMore: "Ko'proq ko'rsatish",
     owner: 'Egasi',
     expenses: 'Xarajatlar',
     current: 'Joriy',
