@@ -10,7 +10,11 @@
     "preview": {
       "distribution": "internal",
       "android": {
-        "buildType": "apk"
+        "buildType": "apk",
+        "image": "latest"
+      },
+      "env": {
+        "EXPO_NO_CAPABILITY_SYNC": "1"
       }
     },
     "production": {
