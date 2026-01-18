@@ -25,8 +25,12 @@ export const DateRangePicker: React.FC<DateRangePickerProps> = ({
   ];
 
   const handlePress = (option: DateRangeOption) => {
-    if (option === 'custom' && onCustomPress) {
-      onCustomPress();
+    if (option === 'custom') {
+      if (onCustomPress) {
+        onCustomPress();
+      }
+      // Don't call onSelect for custom - it will be called after date selection
+      return;
     }
     onSelect(option);
   };

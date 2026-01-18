@@ -19,6 +19,7 @@ import { colors } from '../utils/colors';
 import { getDateDaysAgo, getCurrentDate } from '../utils/formatters';
 import {
   DateRangePicker,
+  DateRangePickerModal,
   ErrorState,
   SkeletonCard,
 } from '../components/common';
@@ -34,13 +35,18 @@ type DateRangeOption = '7days' | '30days' | 'custom';
 export const AnalyticsScreen: React.FC = () => {
   const { t } = useTranslation();
   const [rangeOption, setRangeOption] = useState<DateRangeOption>('7days');
+  const [customDateRange, setCustomDateRange] = useState<DateRange | undefined>();
+  const [showDatePicker, setShowDatePicker] = useState(false);
 
   const dateRange: DateRange = useMemo(() => {
+    if (rangeOption === 'custom' && customDateRange) {
+      return customDateRange;
+    }
     const endDate = getCurrentDate();
     const startDate =
       rangeOption === '7days' ? getDateDaysAgo(7) : getDateDaysAgo(30);
     return { startDate, endDate };
-  }, [rangeOption]);
+  }, [rangeOption, customDateRange]);
 
   const {
     data: revenueData,
@@ -83,6 +89,22 @@ export const AnalyticsScreen: React.FC = () => {
     refetchPeakHours();
     refetchCategory();
   }, [refetchRevenue, refetchCOGS, refetchPeakHours, refetchCategory]);
+
+  const handleRangeSelect = useCallback((option: DateRangeOption) => {
+    if (option !== 'custom') {
+      setCustomDateRange(undefined);
+    }
+    setRangeOption(option);
+  }, []);
+
+  const handleCustomPress = useCallback(() => {
+    setShowDatePicker(true);
+  }, []);
+
+  const handleDateRangeConfirm = useCallback((range: DateRange) => {
+    setCustomDateRange(range);
+    setRangeOption('custom');
+  }, []);
 
   const renderContent = () => {
     if (isLoading) {
@@ -165,13 +187,22 @@ export const AnalyticsScreen: React.FC = () => {
         <View style={styles.section}>
           <DateRangePicker
             selected={rangeOption}
-            onSelect={setRangeOption}
+            onSelect={handleRangeSelect}
+            onCustomPress={handleCustomPress}
           />
         </View>
 
         {/* Main Content */}
         {renderContent()}
       </ScrollView>
+
+      {/* Date Range Picker Modal */}
+      <DateRangePickerModal
+        visible={showDatePicker}
+        onClose={() => setShowDatePicker(false)}
+        onConfirm={handleDateRangeConfirm}
+        initialDateRange={customDateRange}
+      />
     </SafeAreaView>
   );
 };
