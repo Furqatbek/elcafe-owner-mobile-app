@@ -106,16 +106,22 @@ export interface COGSData {
   grossProfit: number;
 }
 
-export interface PeakHour {
+export interface HourlySalesBreakdown {
   hour: number;
-  orderCount: number;
-  revenue: number;
+  totalRevenue: number;
+  totalOrders: number;
+  averageOrderValue: number;
+  percentageOfDailyRevenue: number;
 }
 
 export interface PeakHoursData {
-  peakHours: PeakHour[];
-  peakStartHour: number;
-  peakEndHour: number;
+  peakHours: number[];
+  averagePeakStart: string;
+  averagePeakEnd: string;
+  totalOrdersDuringPeakHours: number;
+  totalOrdersOutsidePeakHours: number;
+  peakHoursPercentage: number;
+  hourlySalesBreakdown: HourlySalesBreakdown[];
 }
 
 export interface CategorySales {

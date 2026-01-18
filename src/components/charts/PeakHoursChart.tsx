@@ -17,7 +17,9 @@ export const PeakHoursChart: React.FC<PeakHoursChartProps> = ({
 }) => {
   const screenWidth = Dimensions.get('window').width - 64;
 
-  if (!data?.peakHours || data.peakHours.length === 0) {
+  const hourlyData = data?.hourlySalesBreakdown ?? [];
+
+  if (hourlyData.length === 0) {
     return (
       <Card title={title}>
         <Text style={styles.emptyText}>No data available</Text>
@@ -25,21 +27,26 @@ export const PeakHoursChart: React.FC<PeakHoursChartProps> = ({
     );
   }
 
-  // Get top hours for display
-  const sortedHours = [...data.peakHours].sort((a, b) => b.orderCount - a.orderCount);
+  // Sort by total orders and get top hours for display
+  const sortedHours = [...hourlyData].sort((a, b) => b.totalOrders - a.totalOrders);
   const topHours = sortedHours.slice(0, 8);
 
   const chartData = {
     labels: topHours.map((h) => formatHour(h.hour).replace(' ', '\n')),
     datasets: [
       {
-        data: topHours.map((h) => h.orderCount),
+        data: topHours.map((h) => h.totalOrders),
       },
     ],
   };
 
-  const peakStartHour = data.peakStartHour ?? 0;
-  const peakEndHour = data.peakEndHour ?? 0;
+  // Format peak time from averagePeakStart and averagePeakEnd
+  const formatPeakTime = (time: string | undefined) => {
+    if (!time) return '--:--';
+    return time.substring(0, 5); // Get HH:MM from HH:MM:SS
+  };
+
+  const peakPercentage = data?.peakHoursPercentage ?? 0;
 
   return (
     <Card title={title}>
@@ -47,8 +54,22 @@ export const PeakHoursChart: React.FC<PeakHoursChartProps> = ({
         <View style={styles.peakBadge}>
           <Text style={styles.peakLabel}>Peak Time</Text>
           <Text style={styles.peakValue}>
-            {formatHour(peakStartHour)} - {formatHour(peakEndHour)}
+            {formatPeakTime(data?.averagePeakStart)} - {formatPeakTime(data?.averagePeakEnd)}
           </Text>
+        </View>
+        <View style={styles.statsRow}>
+          <View style={styles.statItem}>
+            <Text style={styles.statValue}>{data?.totalOrdersDuringPeakHours ?? 0}</Text>
+            <Text style={styles.statLabel}>Peak Orders</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Text style={styles.statValue}>{data?.totalOrdersOutsidePeakHours ?? 0}</Text>
+            <Text style={styles.statLabel}>Off-Peak</Text>
+          </View>
+          <View style={styles.statItem}>
+            <Text style={styles.statValue}>{peakPercentage.toFixed(1)}%</Text>
+            <Text style={styles.statLabel}>Peak %</Text>
+          </View>
         </View>
       </View>
       <BarChart
@@ -85,6 +106,7 @@ const styles = StyleSheet.create({
     backgroundColor: `${colors.primary}10`,
     padding: 12,
     borderRadius: 10,
+    marginBottom: 12,
   },
   peakLabel: {
     fontSize: 13,
@@ -94,6 +116,23 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '600',
     color: colors.primary,
+  },
+  statsRow: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  statItem: {
+    alignItems: 'center',
+  },
+  statValue: {
+    fontSize: 18,
+    fontWeight: '700',
+    color: colors.textPrimary,
+  },
+  statLabel: {
+    fontSize: 11,
+    color: colors.textSecondary,
+    marginTop: 2,
   },
   chart: {
     marginLeft: -16,
