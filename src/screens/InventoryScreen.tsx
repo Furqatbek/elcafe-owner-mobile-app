@@ -9,8 +9,19 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useStockSummary, useInventoryTurnover } from '../hooks/useInventory';
-import { LowStockItem, AlertLevel } from '../types/api.types';
+import { LowStockItem } from '../types/api.types';
 import { colors } from '../utils/colors';
+
+type AlertLevel = 'CRITICAL' | 'LOW' | 'REORDER';
+
+// Compute alert level based on stock ratio
+const getAlertLevelFromStock = (currentStock: number, minimumStock: number): AlertLevel => {
+  if (minimumStock <= 0) return 'REORDER';
+  const ratio = currentStock / minimumStock;
+  if (ratio <= 0.25) return 'CRITICAL';
+  if (ratio <= 0.75) return 'LOW';
+  return 'REORDER';
+};
 import { getDateDaysAgo, getCurrentDate, formatNumber } from '../utils/formatters';
 import {
   Card,
@@ -78,20 +89,21 @@ export const InventoryScreen: React.FC = () => {
   };
 
   const renderStockItem = (item: LowStockItem, index: number) => {
-    const alertColor = getAlertColor(item.alertLevel);
-    const bgColor = getAlertBgColor(item.alertLevel);
+    const alertLevel = getAlertLevelFromStock(item.currentStock, item.minimumStock);
+    const alertColor = getAlertColor(alertLevel);
+    const bgColor = getAlertBgColor(alertLevel);
 
     return (
       <View
-        key={`${item.ingredientName}-${index}`}
+        key={`${item.id}-${index}`}
         style={[styles.stockItem, { backgroundColor: bgColor }]}
       >
         <View style={styles.stockItemHeader}>
           <Text style={styles.stockItemName} numberOfLines={1}>
-            {item.ingredientName}
+            {item.name}
           </Text>
           <View style={[styles.alertBadge, { backgroundColor: alertColor }]}>
-            <Text style={styles.alertBadgeText}>{item.alertLevel}</Text>
+            <Text style={styles.alertBadgeText}>{alertLevel}</Text>
           </View>
         </View>
         <View style={styles.stockItemDetails}>
@@ -134,22 +146,24 @@ export const InventoryScreen: React.FC = () => {
       );
     }
 
+    const lowStockItems = stockData?.lowStockItems ?? [];
+
+    // Compute alert levels for each item
+    const itemsWithLevels = lowStockItems.map((item) => ({
+      ...item,
+      alertLevel: getAlertLevelFromStock(item.currentStock, item.minimumStock),
+    }));
+
+    const criticalItems = itemsWithLevels.filter((i) => i.alertLevel === 'CRITICAL');
+    const lowItems = itemsWithLevels.filter((i) => i.alertLevel === 'LOW');
+    const reorderItems = itemsWithLevels.filter((i) => i.alertLevel === 'REORDER');
+
+    const criticalCount = criticalItems.length;
     const hasStockAlerts =
       stockData &&
-      ((stockData.criticalCount ?? 0) > 0 ||
+      (criticalCount > 0 ||
         (stockData.lowStockCount ?? 0) > 0 ||
         (stockData.reorderCount ?? 0) > 0);
-
-    const lowStockItems = stockData?.lowStockItems ?? [];
-    const criticalItems = lowStockItems.filter(
-      (i) => i.alertLevel === 'CRITICAL'
-    );
-    const lowItems = lowStockItems.filter(
-      (i) => i.alertLevel === 'LOW'
-    );
-    const reorderItems = lowStockItems.filter(
-      (i) => i.alertLevel === 'REORDER'
-    );
 
     return (
       <>
@@ -160,7 +174,7 @@ export const InventoryScreen: React.FC = () => {
               <View style={[styles.statCard, { backgroundColor: `${colors.danger}10` }]}>
                 <Feather name="alert-circle" size={20} color={colors.danger} />
                 <Text style={[styles.statValue, { color: colors.danger }]}>
-                  {stockData.criticalCount ?? 0}
+                  {criticalCount}
                 </Text>
                 <Text style={styles.statLabel}>Critical</Text>
               </View>

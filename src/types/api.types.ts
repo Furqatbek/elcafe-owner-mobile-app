@@ -134,18 +134,18 @@ export interface CategorySales {
 // ============== Inventory Types ==============
 
 export interface LowStockItem {
-  ingredientName: string;
+  id: number;
+  name: string;
   currentStock: number;
   minimumStock: number;
   unit: string;
-  alertLevel: AlertLevel;
 }
 
 export interface StockSummary {
+  activeSubscriptions: number;
   lowStockItems: LowStockItem[];
   lowStockCount: number;
   reorderCount: number;
-  criticalCount: number;
 }
 
 export interface InventoryTurnover {
