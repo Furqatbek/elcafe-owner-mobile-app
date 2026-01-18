@@ -17,6 +17,10 @@ export const colors = {
   warningLight: '#FBBF24',
   warningDark: '#D97706',
 
+  info: '#3B82F6',
+  infoLight: '#60A5FA',
+  infoDark: '#2563EB',
+
   critical: '#DC2626',
 
   // Neutral colors

@@ -6,10 +6,14 @@ export type OrderType = 'DINE_IN' | 'DELIVERY' | 'TAKEAWAY';
 export type PaymentMethod = 'CASH' | 'CARD' | 'ONLINE';
 
 export interface SoldItem {
+  productId: number;
   productName: string;
   quantitySold: number;
   totalRevenue: number;
-  profitMargin: number;
+  costPrice: number | null;
+  totalCost: number | null;
+  profit: number | null;
+  profitMargin: number | null;
 }
 
 export interface OrderStats {
@@ -28,9 +32,38 @@ export interface DashboardComparison {
   trend: TrendDirection;
 }
 
+export interface LowStockAlertItem {
+  ingredientId: number;
+  ingredientName: string;
+  currentStock: number;
+  minimumStock: number;
+  reorderLevel: number;
+  unit: string;
+  supplierName: string | null;
+  alertLevel: AlertLevel;
+}
+
 export interface InventoryAlerts {
   lowStockCount: number;
   reorderCount: number;
+  expiringCount: number;
+  lowStockItems: LowStockAlertItem[];
+}
+
+export interface ShiftTimeInfo {
+  shiftStart: string;
+  shiftEnd: string;
+  businessOpenTime: string;
+  businessCloseTime: string;
+  description: string;
+}
+
+export interface DailyStat {
+  date: string;
+  income: number;
+  expenses: number;
+  orderCount: number;
+  netProfit: number;
 }
 
 export interface DashboardData {
@@ -38,9 +71,14 @@ export interface DashboardData {
   totalExpenses: number;
   netProfit: number;
   profitMargin: number;
+  startDate: string;
+  endDate: string;
+  shiftTimeInfo: ShiftTimeInfo;
   orderStats: OrderStats;
-  incomeByOrderType: Record<OrderType, number>;
-  incomeByPaymentMethod: Record<PaymentMethod, number>;
+  incomeByOrderType: Record<string, number>;
+  incomeByPaymentMethod: Record<string, number>;
+  expensesByCategory: Record<string, number>;
+  dailyStats: DailyStat[];
   comparison: DashboardComparison;
   inventoryAlerts: InventoryAlerts;
   soldItems: SoldItem[];
@@ -209,6 +247,13 @@ export interface AuthState {
 }
 
 // ============== Common Types ==============
+
+export interface ApiResponse<T> {
+  success: boolean;
+  message: string;
+  data: T;
+  timestamp: string;
+}
 
 export interface DateRange {
   startDate: string;

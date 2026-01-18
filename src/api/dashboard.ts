@@ -1,5 +1,5 @@
 import apiClient from './client';
-import { DashboardData, PeriodType } from '../types/api.types';
+import { DashboardData, PeriodType, ApiResponse } from '../types/api.types';
 
 const ENDPOINTS = {
   today: '/api/v1/dashboard/today',
@@ -10,10 +10,11 @@ const ENDPOINTS = {
 export const dashboardApi = {
   getDashboardData: async (restaurantId: number, period: PeriodType = 'today'): Promise<DashboardData> => {
     const endpoint = ENDPOINTS[period];
-    const response = await apiClient.get<DashboardData>(endpoint, {
+    const response = await apiClient.get<ApiResponse<DashboardData>>(endpoint, {
       params: { restaurantId },
     });
-    return response.data;
+    // Extract nested data from API response wrapper
+    return response.data.data;
   },
 
   getTodayData: async (restaurantId: number): Promise<DashboardData> => {

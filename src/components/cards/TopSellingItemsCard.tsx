@@ -62,12 +62,14 @@ export const TopSellingItemsCard: React.FC<TopSellingItemsCardProps> = ({
               <Text style={styles.itemQuantity}>
                 {item.quantitySold} sold
               </Text>
-              <View style={styles.marginBadge}>
-                <Feather name="trending-up" size={10} color={colors.success} />
-                <Text style={styles.marginText}>
-                  {formatPercentage(item.profitMargin)}
-                </Text>
-              </View>
+              {item.profitMargin != null && (
+                <View style={styles.marginBadge}>
+                  <Feather name="trending-up" size={10} color={colors.success} />
+                  <Text style={styles.marginText}>
+                    {formatPercentage(item.profitMargin)}
+                  </Text>
+                </View>
+              )}
             </View>
           </View>
           <Text style={styles.itemRevenue}>
