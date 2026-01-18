@@ -30,11 +30,6 @@
     },
     "plugins": [
       "expo-secure-store"
-    ],
-    "extra": {
-      "eas": {
-        "projectId": "elcafe-owner"
-      }
-    }
+    ]
   }
 }
