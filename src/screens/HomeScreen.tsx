@@ -15,7 +15,7 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { useDashboard } from '../hooks/useDashboard';
 import { useTranslation } from '../hooks/useTranslation';
 import { useAuthStore } from '../store';
-import { PeriodType } from '../types/api.types';
+import { PeriodType, DateRange } from '../types/api.types';
 import { RootStackParamList } from '../navigation/RootNavigator';
 import { colors } from '../utils/colors';
 import { formatDate } from '../utils/formatters';
@@ -25,6 +25,7 @@ import {
   ErrorState,
   SkeletonCard,
   LanguageSelector,
+  DateRangePickerModal,
 } from '../components/common';
 import {
   FinancialSummaryCard,
@@ -38,7 +39,9 @@ import { RevenueByTypeChart } from '../components/charts';
 export const HomeScreen: React.FC = () => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
   const [period, setPeriod] = useState<PeriodType>('today');
-  const { data, isLoading, isError, refetch, isRefetching } = useDashboard(period);
+  const [customDateRange, setCustomDateRange] = useState<DateRange | undefined>();
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const { data, isLoading, isError, refetch, isRefetching } = useDashboard(period, customDateRange);
   const { user, logout } = useAuthStore();
   const { t } = useTranslation();
 
@@ -71,6 +74,22 @@ export const HomeScreen: React.FC = () => {
     );
   }, [logout, t]);
 
+  const handlePeriodSelect = useCallback((newPeriod: PeriodType) => {
+    if (newPeriod !== 'custom') {
+      setCustomDateRange(undefined);
+    }
+    setPeriod(newPeriod);
+  }, []);
+
+  const handleCustomPress = useCallback(() => {
+    setShowDatePicker(true);
+  }, []);
+
+  const handleDateRangeConfirm = useCallback((dateRange: DateRange) => {
+    setCustomDateRange(dateRange);
+    setPeriod('custom');
+  }, []);
+
   const getGreeting = () => {
     const hour = new Date().getHours();
     if (hour < 12) return t('home.morning');
@@ -79,7 +98,18 @@ export const HomeScreen: React.FC = () => {
   };
 
   const getPeriodTitle = () => {
-    return t('home.todayOverview');
+    switch (period) {
+      case 'today':
+        return t('period.todayOverview');
+      case 'week':
+        return t('period.weekOverview');
+      case 'month':
+        return t('period.monthOverview');
+      case 'custom':
+        return t('period.customOverview');
+      default:
+        return t('period.todayOverview');
+    }
   };
 
   const renderContent = () => {
@@ -192,12 +222,25 @@ export const HomeScreen: React.FC = () => {
 
         {/* Period Selector */}
         <View style={styles.section}>
-          <PeriodSelector selected={period} onSelect={setPeriod} />
+          <PeriodSelector
+            selected={period}
+            onSelect={handlePeriodSelect}
+            onCustomPress={handleCustomPress}
+            customDateRange={customDateRange}
+          />
         </View>
 
         {/* Main Content */}
         {renderContent()}
       </ScrollView>
+
+      {/* Date Range Picker Modal */}
+      <DateRangePickerModal
+        visible={showDatePicker}
+        onClose={() => setShowDatePicker(false)}
+        onConfirm={handleDateRangeConfirm}
+        initialDateRange={customDateRange}
+      />
     </SafeAreaView>
   );
 };

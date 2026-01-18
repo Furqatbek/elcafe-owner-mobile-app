@@ -5,5 +5,6 @@ export { EmptyState } from './EmptyState';
 export { SkeletonLoader, SkeletonCard } from './SkeletonLoader';
 export { PeriodSelector } from './PeriodSelector';
 export { DateRangePicker } from './DateRangePicker';
+export { DateRangePickerModal } from './DateRangePickerModal';
 export { Badge, NotificationBadge } from './Badge';
 export { LanguageSelector } from './LanguageSelector';

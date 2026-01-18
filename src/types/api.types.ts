@@ -280,7 +280,7 @@ export interface DateRange {
   endDate: string;
 }
 
-export type PeriodType = 'today' | 'week' | 'month';
+export type PeriodType = 'today' | 'week' | 'month' | 'custom';
 
 export interface ApiError {
   message: string;

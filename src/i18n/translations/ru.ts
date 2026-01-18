@@ -249,4 +249,19 @@ export default {
     trendAnalysis: 'Анализ трендов',
     cogsAnalysis: 'Себестоимость товаров',
   },
+
+  // Period Selector
+  period: {
+    today: 'Сегодня',
+    week: 'Неделя',
+    month: 'Месяц',
+    custom: 'Выбрать',
+    todayOverview: 'Обзор за сегодня',
+    weekOverview: 'Обзор за неделю',
+    monthOverview: 'Обзор за месяц',
+    customOverview: 'Выбранный период',
+    selectDateRange: 'Выбрать период',
+    startDate: 'Начало',
+    endDate: 'Конец',
+  },
 };

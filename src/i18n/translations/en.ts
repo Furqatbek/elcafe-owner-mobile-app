@@ -249,4 +249,19 @@ export default {
     trendAnalysis: 'Trend Analysis',
     cogsAnalysis: 'Cost of Goods Sold',
   },
+
+  // Period Selector
+  period: {
+    today: 'Today',
+    week: 'This Week',
+    month: 'This Month',
+    custom: 'Custom',
+    todayOverview: "Today's Overview",
+    weekOverview: "This Week's Overview",
+    monthOverview: "This Month's Overview",
+    customOverview: 'Custom Period',
+    selectDateRange: 'Select Date Range',
+    startDate: 'Start Date',
+    endDate: 'End Date',
+  },
 };

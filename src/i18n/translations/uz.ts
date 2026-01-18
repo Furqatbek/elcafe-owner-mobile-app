@@ -249,4 +249,19 @@ export default {
     trendAnalysis: 'Trend tahlili',
     cogsAnalysis: 'Mahsulot tannarxi',
   },
+
+  // Period Selector
+  period: {
+    today: 'Bugun',
+    week: 'Hafta',
+    month: 'Oy',
+    custom: 'Tanlash',
+    todayOverview: "Bugungi ko'rsatkichlar",
+    weekOverview: "Haftalik ko'rsatkichlar",
+    monthOverview: "Oylik ko'rsatkichlar",
+    customOverview: 'Tanlangan davr',
+    selectDateRange: 'Davrni tanlang',
+    startDate: 'Boshlanishi',
+    endDate: 'Tugashi',
+  },
 };

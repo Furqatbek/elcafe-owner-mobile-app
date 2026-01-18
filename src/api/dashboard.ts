@@ -1,15 +1,30 @@
 import apiClient from './client';
-import { DashboardData, PeriodType, ApiResponse } from '../types/api.types';
+import { DashboardData, PeriodType, DateRange, ApiResponse } from '../types/api.types';
 
-const ENDPOINTS = {
+const ENDPOINTS: Record<Exclude<PeriodType, 'custom'>, string> = {
   today: '/api/v1/dashboard/today',
   week: '/api/v1/dashboard/week',
   month: '/api/v1/dashboard/month',
 };
 
 export const dashboardApi = {
-  getDashboardData: async (restaurantId: number, period: PeriodType = 'today'): Promise<DashboardData> => {
-    const endpoint = ENDPOINTS[period];
+  getDashboardData: async (
+    restaurantId: number,
+    period: PeriodType = 'today',
+    dateRange?: DateRange
+  ): Promise<DashboardData> => {
+    if (period === 'custom' && dateRange) {
+      const response = await apiClient.get<ApiResponse<DashboardData>>('/api/v1/dashboard/custom', {
+        params: {
+          restaurantId,
+          startDate: dateRange.startDate,
+          endDate: dateRange.endDate,
+        },
+      });
+      return response.data.data;
+    }
+
+    const endpoint = ENDPOINTS[period as Exclude<PeriodType, 'custom'>];
     const response = await apiClient.get<ApiResponse<DashboardData>>(endpoint, {
       params: { restaurantId },
     });
