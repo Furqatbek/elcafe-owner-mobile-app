@@ -13,6 +13,7 @@ import {
   usePeakHours,
   useSalesByCategory,
 } from '../hooks/useAnalytics';
+import { useTranslation } from '../hooks/useTranslation';
 import { DateRange } from '../types/api.types';
 import { colors } from '../utils/colors';
 import { getDateDaysAgo, getCurrentDate } from '../utils/formatters';
@@ -31,6 +32,7 @@ import {
 type DateRangeOption = '7days' | '30days' | 'custom';
 
 export const AnalyticsScreen: React.FC = () => {
+  const { t } = useTranslation();
   const [rangeOption, setRangeOption] = useState<DateRangeOption>('7days');
 
   const dateRange: DateRange = useMemo(() => {
@@ -97,7 +99,7 @@ export const AnalyticsScreen: React.FC = () => {
     if (hasError) {
       return (
         <ErrorState
-          message="Unable to load analytics data"
+          message={t('errors.analyticsError')}
           onRetry={handleRefresh}
           fullScreen
         />
@@ -109,28 +111,28 @@ export const AnalyticsScreen: React.FC = () => {
         {/* Revenue Trend Chart */}
         {revenueData && (
           <View style={styles.section}>
-            <RevenueLineChart data={revenueData} title="Revenue Trend" />
+            <RevenueLineChart data={revenueData} title={t('analytics.revenueTrend')} />
           </View>
         )}
 
         {/* COGS Summary Card */}
         {cogsData && (
           <View style={styles.section}>
-            <COGSCard data={cogsData} title="Cost Analysis" />
+            <COGSCard data={cogsData} title={t('analytics.costAnalysis')} />
           </View>
         )}
 
         {/* Peak Hours Chart */}
         {peakHoursData && (
           <View style={styles.section}>
-            <PeakHoursChart data={peakHoursData} title="Peak Hours" />
+            <PeakHoursChart data={peakHoursData} title={t('analytics.peakHours')} />
           </View>
         )}
 
         {/* Sales by Category Chart */}
         {categoryData && (
           <View style={styles.section}>
-            <CategorySalesChart data={categoryData} title="Sales by Category" />
+            <CategorySalesChart data={categoryData} title={t('analytics.salesByCategory')} />
           </View>
         )}
       </>
@@ -153,9 +155,9 @@ export const AnalyticsScreen: React.FC = () => {
       >
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.title}>Analytics</Text>
+          <Text style={styles.title}>{t('analytics.title')}</Text>
           <Text style={styles.subtitle}>
-            Business performance insights
+            {t('analytics.subtitle')}
           </Text>
         </View>
 

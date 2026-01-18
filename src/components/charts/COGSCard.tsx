@@ -5,6 +5,7 @@ import { colors } from '../../utils/colors';
 import { COGSData } from '../../types/api.types';
 import { formatCurrency, formatPercentage } from '../../utils/formatters';
 import Card from '../common/Card';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface COGSCardProps {
   data?: COGSData | null;
@@ -21,27 +22,28 @@ const defaultData: COGSData = {
 
 export const COGSCard: React.FC<COGSCardProps> = ({
   data,
-  title = 'Cost Analysis',
+  title,
 }) => {
+  const { t } = useTranslation();
   const safeData = data ?? defaultData;
   const foodCostPercentage = safeData.foodCostPercentage ?? 0;
   const grossProfitMargin = safeData.grossProfitMargin ?? 0;
 
   const metrics = [
     {
-      label: 'Food Cost',
+      label: t('cogs.foodCost'),
       value: formatPercentage(foodCostPercentage),
       icon: 'shopping-cart' as const,
       color: foodCostPercentage > 35 ? colors.danger : colors.success,
     },
     {
-      label: 'Gross Profit',
+      label: t('cogs.grossProfit'),
       value: formatCurrency(safeData.grossProfit),
       icon: 'dollar-sign' as const,
       color: colors.success,
     },
     {
-      label: 'Gross Margin',
+      label: t('cogs.grossMargin'),
       value: formatPercentage(grossProfitMargin),
       icon: 'percent' as const,
       color: grossProfitMargin > 60 ? colors.success : colors.warning,
@@ -49,7 +51,7 @@ export const COGSCard: React.FC<COGSCardProps> = ({
   ];
 
   return (
-    <Card title={title}>
+    <Card title={title ?? t('analytics.costAnalysis')}>
       <View style={styles.metricsRow}>
         {metrics.map((metric) => (
           <View key={metric.label} style={styles.metricItem}>
@@ -65,12 +67,12 @@ export const COGSCard: React.FC<COGSCardProps> = ({
       </View>
       <View style={styles.totalRow}>
         <View style={styles.totalItem}>
-          <Text style={styles.totalLabel}>Total Revenue</Text>
+          <Text style={styles.totalLabel}>{t('reports.totalRevenue')}</Text>
           <Text style={styles.totalValue}>{formatCurrency(safeData.totalRevenue)}</Text>
         </View>
         <View style={styles.divider} />
         <View style={styles.totalItem}>
-          <Text style={styles.totalLabel}>Total COGS</Text>
+          <Text style={styles.totalLabel}>{t('cogs.totalCogs')}</Text>
           <Text style={[styles.totalValue, { color: colors.danger }]}>
             {formatCurrency(safeData.totalCOGS)}
           </Text>

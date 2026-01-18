@@ -4,6 +4,7 @@ import { Feather } from '@expo/vector-icons';
 import { colors } from '../../utils/colors';
 import { formatCurrency, formatPercentage } from '../../utils/formatters';
 import Card from '../common/Card';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface FinancialSummaryCardProps {
   totalIncome?: number | null;
@@ -18,27 +19,28 @@ export const FinancialSummaryCard: React.FC<FinancialSummaryCardProps> = ({
   netProfit,
   profitMargin,
 }) => {
+  const { t } = useTranslation();
   const metrics = [
     {
-      label: 'Revenue',
+      label: t('home.revenue'),
       value: formatCurrency(totalIncome),
       icon: 'dollar-sign' as const,
       color: colors.success,
     },
     {
-      label: 'Expenses',
+      label: t('common.expenses'),
       value: formatCurrency(totalExpenses),
       icon: 'minus-circle' as const,
       color: colors.danger,
     },
     {
-      label: 'Net Profit',
+      label: t('reports.netIncome'),
       value: formatCurrency(netProfit),
       icon: 'trending-up' as const,
       color: colors.primary,
     },
     {
-      label: 'Margin',
+      label: t('cogs.margin'),
       value: formatPercentage(profitMargin),
       icon: 'percent' as const,
       color: '#8B5CF6',
@@ -46,7 +48,7 @@ export const FinancialSummaryCard: React.FC<FinancialSummaryCardProps> = ({
   ];
 
   return (
-    <Card title="Financial Summary">
+    <Card title={t('cards.financialSummary')}>
       <View style={styles.grid}>
         {metrics.map((metric, index) => (
           <View key={metric.label} style={styles.metricItem}>

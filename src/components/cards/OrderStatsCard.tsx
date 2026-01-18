@@ -4,6 +4,7 @@ import { Feather } from '@expo/vector-icons';
 import { colors } from '../../utils/colors';
 import { OrderStats } from '../../types/api.types';
 import { formatNumber, formatCurrency } from '../../utils/formatters';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface OrderStatsCardProps {
   stats?: OrderStats | null;
@@ -18,35 +19,36 @@ const defaultStats: OrderStats = {
 };
 
 export const OrderStatsCard: React.FC<OrderStatsCardProps> = ({ stats }) => {
+  const { t } = useTranslation();
   const data = stats ?? defaultStats;
 
   const items = [
     {
-      label: 'Total Orders',
+      label: t('orderStats.totalOrders'),
       value: formatNumber(data.totalOrders),
       icon: 'shopping-bag' as const,
       color: colors.primary,
     },
     {
-      label: 'Avg Order Value',
+      label: t('orderStats.avgOrderValue'),
       value: formatCurrency(data.averageOrderValue),
       icon: 'dollar-sign' as const,
       color: colors.success,
     },
     {
-      label: 'Items Sold',
+      label: t('orderStats.itemsSold'),
       value: formatNumber(data.totalItemsSold),
       icon: 'package' as const,
       color: '#8B5CF6',
     },
     {
-      label: 'Completed',
+      label: t('orderStats.completed'),
       value: formatNumber(data.completedOrders),
       icon: 'check-circle' as const,
       color: colors.success,
     },
     {
-      label: 'Cancelled',
+      label: t('orderStats.cancelled'),
       value: formatNumber(data.cancelledOrders),
       icon: 'x-circle' as const,
       color: colors.danger,
@@ -55,7 +57,7 @@ export const OrderStatsCard: React.FC<OrderStatsCardProps> = ({ stats }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Order Statistics</Text>
+      <Text style={styles.title}>{t('orderStats.title')}</Text>
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}

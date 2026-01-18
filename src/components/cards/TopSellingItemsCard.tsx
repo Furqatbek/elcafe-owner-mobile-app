@@ -5,6 +5,7 @@ import { colors } from '../../utils/colors';
 import { SoldItem } from '../../types/api.types';
 import { formatCurrency, formatPercentage } from '../../utils/formatters';
 import Card from '../common/Card';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface TopSellingItemsCardProps {
   items?: SoldItem[] | null;
@@ -15,13 +16,14 @@ export const TopSellingItemsCard: React.FC<TopSellingItemsCardProps> = ({
   items,
   limit = 3,
 }) => {
+  const { t } = useTranslation();
   const safeItems = items ?? [];
   const topItems = safeItems.slice(0, limit);
 
   if (topItems.length === 0) {
     return (
-      <Card title="Top Selling Items">
-        <Text style={styles.emptyText}>No sales data available</Text>
+      <Card title={t('analytics.topSellingItems')}>
+        <Text style={styles.emptyText}>{t('common.noData')}</Text>
       </Card>
     );
   }
@@ -40,7 +42,7 @@ export const TopSellingItemsCard: React.FC<TopSellingItemsCardProps> = ({
   };
 
   return (
-    <Card title="Top Selling Items">
+    <Card title={t('analytics.topSellingItems')}>
       {topItems.map((item, index) => (
         <View
           key={item.productName}
@@ -60,7 +62,7 @@ export const TopSellingItemsCard: React.FC<TopSellingItemsCardProps> = ({
             </Text>
             <View style={styles.itemMeta}>
               <Text style={styles.itemQuantity}>
-                {item.quantitySold} sold
+                {t('format.sold', { count: item.quantitySold })}
               </Text>
               {item.profitMargin != null && (
                 <View style={styles.marginBadge}>

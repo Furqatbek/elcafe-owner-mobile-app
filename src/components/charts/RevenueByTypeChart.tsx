@@ -4,6 +4,7 @@ import { PieChart } from 'react-native-chart-kit';
 import { colors, pieChartColors } from '../../utils/colors';
 import { formatCurrency, formatPercentage } from '../../utils/formatters';
 import Card from '../common/Card';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface RevenueByTypeChartProps {
   data?: Record<string, number> | null;
@@ -12,9 +13,11 @@ interface RevenueByTypeChartProps {
 
 export const RevenueByTypeChart: React.FC<RevenueByTypeChartProps> = ({
   data,
-  title = 'Revenue by Order Type',
+  title,
 }) => {
+  const { t } = useTranslation();
   const screenWidth = Dimensions.get('window').width - 64;
+  const cardTitle = title ?? t('analytics.revenueByOrderType');
   const safeData = data ?? {};
   const total = Object.values(safeData).reduce((sum, val) => sum + (val ?? 0), 0);
 
@@ -30,14 +33,14 @@ export const RevenueByTypeChart: React.FC<RevenueByTypeChartProps> = ({
 
   if (chartData.length === 0) {
     return (
-      <Card title={title}>
-        <Text style={styles.emptyText}>No data available</Text>
+      <Card title={cardTitle}>
+        <Text style={styles.emptyText}>{t('common.noData')}</Text>
       </Card>
     );
   }
 
   return (
-    <Card title={title}>
+    <Card title={cardTitle}>
       <View style={styles.chartContainer}>
         <PieChart
           data={chartData}

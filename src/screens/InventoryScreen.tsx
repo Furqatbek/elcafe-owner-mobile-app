@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useStockSummary, useInventoryTurnover } from '../hooks/useInventory';
+import { useTranslation } from '../hooks/useTranslation';
 import { LowStockItem } from '../types/api.types';
 import { colors } from '../utils/colors';
 
@@ -31,6 +32,7 @@ import {
 } from '../components/common';
 
 export const InventoryScreen: React.FC = () => {
+  const { t } = useTranslation();
   const dateRange = useMemo(
     () => ({
       startDate: getDateDaysAgo(30),
@@ -108,14 +110,14 @@ export const InventoryScreen: React.FC = () => {
         </View>
         <View style={styles.stockItemDetails}>
           <View style={styles.stockInfo}>
-            <Text style={styles.stockLabel}>Current</Text>
+            <Text style={styles.stockLabel}>{t('common.current')}</Text>
             <Text style={[styles.stockValue, { color: alertColor }]}>
               {formatNumber(item.currentStock, 1)} {item.unit}
             </Text>
           </View>
           <View style={styles.stockDivider} />
           <View style={styles.stockInfo}>
-            <Text style={styles.stockLabel}>Minimum</Text>
+            <Text style={styles.stockLabel}>{t('common.minimum')}</Text>
             <Text style={styles.stockValue}>
               {formatNumber(item.minimumStock, 1)} {item.unit}
             </Text>
@@ -139,7 +141,7 @@ export const InventoryScreen: React.FC = () => {
     if (hasError) {
       return (
         <ErrorState
-          message="Unable to load inventory data"
+          message={t('errors.inventoryError')}
           onRetry={handleRefresh}
           fullScreen
         />
@@ -176,21 +178,21 @@ export const InventoryScreen: React.FC = () => {
                 <Text style={[styles.statValue, { color: colors.danger }]}>
                   {criticalCount}
                 </Text>
-                <Text style={styles.statLabel}>Critical</Text>
+                <Text style={styles.statLabel}>{t('inventory.critical')}</Text>
               </View>
               <View style={[styles.statCard, { backgroundColor: `${colors.warning}10` }]}>
                 <Feather name="alert-triangle" size={20} color={colors.warning} />
                 <Text style={[styles.statValue, { color: colors.warning }]}>
                   {stockData.lowStockCount ?? 0}
                 </Text>
-                <Text style={styles.statLabel}>Low Stock</Text>
+                <Text style={styles.statLabel}>{t('inventory.lowStock')}</Text>
               </View>
               <View style={[styles.statCard, { backgroundColor: '#F9731610' }]}>
                 <Feather name="package" size={20} color="#F97316" />
                 <Text style={[styles.statValue, { color: '#F97316' }]}>
                   {stockData.reorderCount ?? 0}
                 </Text>
-                <Text style={styles.statLabel}>Reorder</Text>
+                <Text style={styles.statLabel}>{t('inventory.reorder')}</Text>
               </View>
             </View>
           </View>
@@ -202,8 +204,8 @@ export const InventoryScreen: React.FC = () => {
             <Card>
               <EmptyState
                 icon="check-circle"
-                title="All Stock Levels Healthy"
-                message="No items require immediate attention"
+                title={t('inventory.allStockLevelsHealthy')}
+                message={t('inventory.noItemsNeedAttention')}
                 iconColor={colors.success}
               />
             </Card>
@@ -213,7 +215,7 @@ export const InventoryScreen: React.FC = () => {
             {/* Critical Items */}
             {criticalItems && criticalItems.length > 0 && (
               <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Critical Items</Text>
+                <Text style={styles.sectionTitle}>{t('inventory.criticalItems')}</Text>
                 {criticalItems.map((item, index) => renderStockItem(item, index))}
               </View>
             )}
@@ -221,7 +223,7 @@ export const InventoryScreen: React.FC = () => {
             {/* Low Stock Items */}
             {lowItems && lowItems.length > 0 && (
               <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Low Stock</Text>
+                <Text style={styles.sectionTitle}>{t('inventory.lowStock')}</Text>
                 {lowItems.map((item, index) => renderStockItem(item, index))}
               </View>
             )}
@@ -229,7 +231,7 @@ export const InventoryScreen: React.FC = () => {
             {/* Reorder Queue */}
             {reorderItems && reorderItems.length > 0 && (
               <View style={styles.section}>
-                <Text style={styles.sectionTitle}>Reorder Queue</Text>
+                <Text style={styles.sectionTitle}>{t('inventory.reorderQueue')}</Text>
                 {reorderItems.map((item, index) => renderStockItem(item, index))}
               </View>
             )}
@@ -239,21 +241,21 @@ export const InventoryScreen: React.FC = () => {
         {/* Inventory Metrics */}
         {turnoverData && (
           <View style={styles.section}>
-            <Card title="Inventory Metrics">
+            <Card title={t('inventory.inventoryMetrics')}>
               <View style={styles.metricsGrid}>
                 <View style={styles.metricItem}>
                   <Feather name="refresh-cw" size={20} color={colors.primary} />
                   <Text style={styles.metricValue}>
                     {(turnoverData.turnoverRatio ?? 0).toFixed(2)}x
                   </Text>
-                  <Text style={styles.metricLabel}>Turnover Ratio</Text>
+                  <Text style={styles.metricLabel}>{t('inventory.turnoverRatio')}</Text>
                 </View>
                 <View style={styles.metricItem}>
                   <Feather name="clock" size={20} color={colors.primary} />
                   <Text style={styles.metricValue}>
                     {Math.round(turnoverData.daysToSellInventory ?? 0)}
                   </Text>
-                  <Text style={styles.metricLabel}>Days to Sell</Text>
+                  <Text style={styles.metricLabel}>{t('inventory.daysToSell')}</Text>
                 </View>
               </View>
             </Card>
@@ -279,8 +281,8 @@ export const InventoryScreen: React.FC = () => {
       >
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.title}>Inventory</Text>
-          <Text style={styles.subtitle}>Stock alerts and metrics</Text>
+          <Text style={styles.title}>{t('inventory.title')}</Text>
+          <Text style={styles.subtitle}>{t('inventory.subtitle')}</Text>
         </View>
 
         {/* Main Content */}

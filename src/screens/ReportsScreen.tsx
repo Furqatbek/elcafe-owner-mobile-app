@@ -31,6 +31,7 @@ import {
   ErrorState,
   SkeletonCard,
 } from '../components/common';
+import { useTranslation } from '../hooks/useTranslation';
 
 type ReportTab = 'pl' | 'customers';
 type DateRangeOption = '7days' | '30days' | 'custom';
@@ -83,6 +84,7 @@ const CircularProgress: React.FC<CircularProgressProps> = ({
 };
 
 export const ReportsScreen: React.FC = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<ReportTab>('pl');
   const [rangeOption, setRangeOption] = useState<DateRangeOption>('30days');
 
@@ -139,10 +141,10 @@ export const ReportsScreen: React.FC = () => {
     if (!plData) return null;
 
     const revenueItems = [
-      { label: 'Sales Revenue', value: plData.salesRevenue ?? 0 },
-      { label: 'Service Fees', value: plData.serviceFeeRevenue ?? 0 },
-      { label: 'Delivery Fees', value: plData.deliveryFeeRevenue ?? 0 },
-      { label: 'Tips', value: plData.tipRevenue ?? 0 },
+      { label: t('reports.salesRevenue'), value: plData.salesRevenue ?? 0 },
+      { label: t('reports.serviceFees'), value: plData.serviceFeeRevenue ?? 0 },
+      { label: t('reports.deliveryFees'), value: plData.deliveryFeeRevenue ?? 0 },
+      { label: t('reports.tips'), value: plData.tipRevenue ?? 0 },
     ];
 
     const expenseEntries = Object.entries(plData.expensesByCategory ?? {});
@@ -154,7 +156,7 @@ export const ReportsScreen: React.FC = () => {
       <>
         {/* Revenue Breakdown */}
         <View style={styles.section}>
-          <Card title="Revenue Breakdown">
+          <Card title={t('reports.revenueBreakdown')}>
             {revenueItems.map((item) => (
               <View key={item.label} style={styles.lineItem}>
                 <Text style={styles.lineItemLabel}>{item.label}</Text>
@@ -164,7 +166,7 @@ export const ReportsScreen: React.FC = () => {
               </View>
             ))}
             <View style={[styles.lineItem, styles.totalLine]}>
-              <Text style={styles.totalLabel}>Total Revenue</Text>
+              <Text style={styles.totalLabel}>{t('reports.totalRevenue')}</Text>
               <Text style={styles.totalValue}>
                 {formatCurrency(plData.totalRevenue ?? 0)}
               </Text>
@@ -174,7 +176,7 @@ export const ReportsScreen: React.FC = () => {
 
         {/* Expenses Breakdown */}
         <View style={styles.section}>
-          <Card title="Expenses by Category">
+          <Card title={t('reports.expensesByCategory')}>
             {expenseEntries.map(([category, amount]) => (
               <View key={category} style={styles.expenseItem}>
                 <View style={styles.expenseBar}>
@@ -199,7 +201,7 @@ export const ReportsScreen: React.FC = () => {
               </View>
             ))}
             <View style={[styles.lineItem, styles.totalLine]}>
-              <Text style={styles.totalLabel}>Total Expenses</Text>
+              <Text style={styles.totalLabel}>{t('reports.totalExpenses')}</Text>
               <Text style={[styles.totalValue, { color: colors.danger }]}>
                 {formatCurrency(totalExpenses)}
               </Text>
@@ -216,7 +218,7 @@ export const ReportsScreen: React.FC = () => {
                 size={32}
                 color={isProfit ? colors.success : colors.danger}
               />
-              <Text style={styles.netIncomeLabel}>Net Income</Text>
+              <Text style={styles.netIncomeLabel}>{t('reports.netIncome')}</Text>
               <Text
                 style={[
                   styles.netIncomeValue,
@@ -226,7 +228,7 @@ export const ReportsScreen: React.FC = () => {
                 {formatCurrency(netIncome)}
               </Text>
               <Text style={styles.orderCount}>
-                From {formatNumber(plData.orderCount ?? 0)} orders
+                {t('reports.fromOrders', { count: formatNumber(plData.orderCount ?? 0) })}
               </Text>
             </View>
           </Card>
@@ -241,7 +243,7 @@ export const ReportsScreen: React.FC = () => {
         {/* Retention Rate */}
         {retentionData && (
           <View style={styles.section}>
-            <Card title="Customer Retention">
+            <Card title={t('reports.customerRetention')}>
               <View style={styles.retentionContainer}>
                 <CircularProgress
                   percentage={retentionData.retentionRate ?? 0}
@@ -250,13 +252,13 @@ export const ReportsScreen: React.FC = () => {
                 />
                 <View style={styles.retentionStats}>
                   <View style={styles.retentionStat}>
-                    <Text style={styles.retentionStatLabel}>Repeat Rate</Text>
+                    <Text style={styles.retentionStatLabel}>{t('reports.repeatRate')}</Text>
                     <Text style={styles.retentionStatValue}>
                       {formatPercentage(retentionData.repeatCustomerRate ?? 0)}
                     </Text>
                   </View>
                   <View style={styles.retentionStat}>
-                    <Text style={styles.retentionStatLabel}>Churn Rate</Text>
+                    <Text style={styles.retentionStatLabel}>{t('reports.churnRate')}</Text>
                     <Text style={[styles.retentionStatValue, { color: colors.danger }]}>
                       {formatPercentage(retentionData.churnRate ?? 0)}
                     </Text>
@@ -276,14 +278,14 @@ export const ReportsScreen: React.FC = () => {
                 <Text style={[styles.customerCountValue, { color: colors.success }]}>
                   {formatNumber(retentionData.newCustomers ?? 0)}
                 </Text>
-                <Text style={styles.customerCountLabel}>New Customers</Text>
+                <Text style={styles.customerCountLabel}>{t('reports.newCustomers')}</Text>
               </View>
               <View style={[styles.customerCountCard, { backgroundColor: `${colors.primary}10` }]}>
                 <Feather name="users" size={24} color={colors.primary} />
                 <Text style={[styles.customerCountValue, { color: colors.primary }]}>
                   {formatNumber(retentionData.returningCustomers ?? 0)}
                 </Text>
-                <Text style={styles.customerCountLabel}>Returning</Text>
+                <Text style={styles.customerCountLabel}>{t('reports.returningCustomers')}</Text>
               </View>
             </View>
           </View>
@@ -292,10 +294,10 @@ export const ReportsScreen: React.FC = () => {
         {/* Customer LTV */}
         {ltvData && (
           <View style={styles.section}>
-            <Card title="Customer Lifetime Value">
+            <Card title={t('reports.customerLifetimeValue')}>
               <View style={styles.ltvContainer}>
                 <View style={styles.ltvMain}>
-                  <Text style={styles.ltvLabel}>Average LTV</Text>
+                  <Text style={styles.ltvLabel}>{t('reports.averageLTV')}</Text>
                   <Text style={styles.ltvValue}>
                     {formatCurrency(ltvData.averageLTV ?? 0)}
                   </Text>
@@ -306,7 +308,7 @@ export const ReportsScreen: React.FC = () => {
                     <Text style={styles.ltvStatValue}>
                       {formatCurrency(ltvData.averageOrderValue ?? 0)}
                     </Text>
-                    <Text style={styles.ltvStatLabel}>Avg Order</Text>
+                    <Text style={styles.ltvStatLabel}>{t('reports.avgOrderValue')}</Text>
                   </View>
                   <View style={styles.ltvDivider} />
                   <View style={styles.ltvStat}>
@@ -314,7 +316,7 @@ export const ReportsScreen: React.FC = () => {
                     <Text style={styles.ltvStatValue}>
                       {(ltvData.averageOrdersPerCustomer ?? 0).toFixed(1)}
                     </Text>
-                    <Text style={styles.ltvStatLabel}>Avg Orders/Customer</Text>
+                    <Text style={styles.ltvStatLabel}>{t('reports.avgOrdersPerCustomer')}</Text>
                   </View>
                 </View>
               </View>
@@ -339,7 +341,7 @@ export const ReportsScreen: React.FC = () => {
     if (hasError) {
       return (
         <ErrorState
-          message="Unable to load report data"
+          message={t('errors.reportsError')}
           onRetry={handleRefresh}
           fullScreen
         />
@@ -365,8 +367,8 @@ export const ReportsScreen: React.FC = () => {
       >
         {/* Header */}
         <View style={styles.header}>
-          <Text style={styles.title}>Reports</Text>
-          <Text style={styles.subtitle}>Financial and customer insights</Text>
+          <Text style={styles.title}>{t('reports.title')}</Text>
+          <Text style={styles.subtitle}>{t('reports.subtitle')}</Text>
         </View>
 
         {/* Tab Selector */}
@@ -382,7 +384,7 @@ export const ReportsScreen: React.FC = () => {
                   activeTab === 'pl' && styles.tabTextActive,
                 ]}
               >
-                P&L
+                {t('reports.profitLoss')}
               </Text>
             </TouchableOpacity>
             <TouchableOpacity
@@ -395,7 +397,7 @@ export const ReportsScreen: React.FC = () => {
                   activeTab === 'customers' && styles.tabTextActive,
                 ]}
               >
-                Customers
+                {t('reports.customers')}
               </Text>
             </TouchableOpacity>
           </View>

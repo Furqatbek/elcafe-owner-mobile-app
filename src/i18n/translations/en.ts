@@ -17,6 +17,10 @@ export default {
     pullToRefresh: 'Pull to refresh',
     seeAll: 'See All',
     viewAll: 'View All',
+    owner: 'Owner',
+    expenses: 'Expenses',
+    current: 'Current',
+    minimum: 'Minimum',
   },
 
   // Navigation
@@ -64,15 +68,19 @@ export default {
   // Analytics Screen
   analytics: {
     title: 'Analytics',
-    subtitle: 'Business insights',
+    subtitle: 'Business performance insights',
     revenueTrend: 'Revenue Trend',
     salesByCategory: 'Sales by Category',
     peakHours: 'Peak Hours',
     topSellingItems: 'Top Selling Items',
     revenueByType: 'Revenue by Type',
+    revenueByOrderType: 'Revenue by Order Type',
     total: 'Total',
     dailyAvg: 'Daily Avg',
     peakTime: 'Peak Time',
+    peakOrders: 'Peak Orders',
+    offPeak: 'Off-Peak',
+    peakPercentage: 'Peak %',
     busiestHours: 'Busiest Hours',
     dateRange: 'Date Range',
     last7Days: 'Last 7 Days',
@@ -80,12 +88,32 @@ export default {
     thisMonth: 'This Month',
     lastMonth: 'Last Month',
     custom: 'Custom',
+    costAnalysis: 'Cost Analysis',
+  },
+
+  // COGS (Cost of Goods Sold)
+  cogs: {
+    foodCost: 'Food Cost',
+    grossProfit: 'Gross Profit',
+    grossMargin: 'Gross Margin',
+    totalCogs: 'Total COGS',
+    margin: 'Margin',
+  },
+
+  // Order Statistics
+  orderStats: {
+    title: 'Order Statistics',
+    totalOrders: 'Total Orders',
+    avgOrderValue: 'Avg Order Value',
+    itemsSold: 'Items Sold',
+    completed: 'Completed',
+    cancelled: 'Cancelled',
   },
 
   // Inventory Screen
   inventory: {
     title: 'Inventory',
-    subtitle: 'Stock management',
+    subtitle: 'Stock alerts and metrics',
     stockAlerts: 'Stock Alerts',
     allItems: 'All Items',
     critical: 'Critical',
@@ -97,8 +125,12 @@ export default {
     daysToSell: 'Days to Sell',
     currentStock: 'Current Stock',
     minStock: 'Min Stock',
-    healthyInventory: 'Inventory levels are healthy',
+    healthyInventory: 'Inventory Healthy',
+    allStockLevelsHealthy: 'All Stock Levels Healthy',
+    noItemsNeedAttention: 'No items require immediate attention',
     noAlerts: 'No stock alerts at this time',
+    criticalItems: 'Critical Items',
+    reorderQueue: 'Reorder Queue',
   },
 
   // Reports Screen
@@ -190,6 +222,7 @@ export default {
     percentage: '{{value}}%',
     items: '{{count}} items',
     sold: '{{count}} sold',
+    moreItems: '+{{count}} more items',
   },
 
   // Errors
@@ -200,6 +233,10 @@ export default {
     unauthorized: 'Session expired. Please login again.',
     notFound: 'Resource not found',
     serverError: 'Server error. Please try again later.',
+    dashboardError: 'Unable to load dashboard data',
+    analyticsError: 'Unable to load analytics data',
+    inventoryError: 'Unable to load inventory data',
+    reportsError: 'Unable to load report data',
   },
 
   // Card Titles

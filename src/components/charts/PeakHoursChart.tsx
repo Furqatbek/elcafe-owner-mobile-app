@@ -5,6 +5,7 @@ import { colors, chartConfig } from '../../utils/colors';
 import { PeakHoursData } from '../../types/api.types';
 import { formatHour } from '../../utils/formatters';
 import Card from '../common/Card';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface PeakHoursChartProps {
   data?: PeakHoursData | null;
@@ -13,16 +14,18 @@ interface PeakHoursChartProps {
 
 export const PeakHoursChart: React.FC<PeakHoursChartProps> = ({
   data,
-  title = 'Peak Hours',
+  title,
 }) => {
+  const { t } = useTranslation();
   const screenWidth = Dimensions.get('window').width - 64;
+  const cardTitle = title ?? t('analytics.peakHours');
 
   const hourlyData = data?.hourlySalesBreakdown ?? [];
 
   if (hourlyData.length === 0) {
     return (
-      <Card title={title}>
-        <Text style={styles.emptyText}>No data available</Text>
+      <Card title={cardTitle}>
+        <Text style={styles.emptyText}>{t('common.noData')}</Text>
       </Card>
     );
   }
@@ -49,10 +52,10 @@ export const PeakHoursChart: React.FC<PeakHoursChartProps> = ({
   const peakPercentage = data?.peakHoursPercentage ?? 0;
 
   return (
-    <Card title={title}>
+    <Card title={cardTitle}>
       <View style={styles.peakInfo}>
         <View style={styles.peakBadge}>
-          <Text style={styles.peakLabel}>Peak Time</Text>
+          <Text style={styles.peakLabel}>{t('analytics.peakTime')}</Text>
           <Text style={styles.peakValue}>
             {formatPeakTime(data?.averagePeakStart)} - {formatPeakTime(data?.averagePeakEnd)}
           </Text>
@@ -60,15 +63,15 @@ export const PeakHoursChart: React.FC<PeakHoursChartProps> = ({
         <View style={styles.statsRow}>
           <View style={styles.statItem}>
             <Text style={styles.statValue}>{data?.totalOrdersDuringPeakHours ?? 0}</Text>
-            <Text style={styles.statLabel}>Peak Orders</Text>
+            <Text style={styles.statLabel}>{t('analytics.peakOrders')}</Text>
           </View>
           <View style={styles.statItem}>
             <Text style={styles.statValue}>{data?.totalOrdersOutsidePeakHours ?? 0}</Text>
-            <Text style={styles.statLabel}>Off-Peak</Text>
+            <Text style={styles.statLabel}>{t('analytics.offPeak')}</Text>
           </View>
           <View style={styles.statItem}>
             <Text style={styles.statValue}>{peakPercentage.toFixed(1)}%</Text>
-            <Text style={styles.statLabel}>Peak %</Text>
+            <Text style={styles.statLabel}>{t('analytics.peakPercentage')}</Text>
           </View>
         </View>
       </View>

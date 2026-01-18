@@ -5,6 +5,7 @@ import { colors, chartConfig } from '../../utils/colors';
 import { DailyRevenue } from '../../types/api.types';
 import { formatCompactCurrency } from '../../utils/formatters';
 import Card from '../common/Card';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface RevenueLineChartProps {
   data?: DailyRevenue[] | Record<string, unknown> | null;
@@ -13,9 +14,11 @@ interface RevenueLineChartProps {
 
 export const RevenueLineChart: React.FC<RevenueLineChartProps> = ({
   data,
-  title = 'Revenue Trend',
+  title,
 }) => {
+  const { t } = useTranslation();
   const screenWidth = Dimensions.get('window').width - 64;
+  const cardTitle = title ?? t('analytics.revenueTrend');
 
   // Handle both array and wrapped object responses
   const extractData = (): DailyRevenue[] => {
@@ -37,8 +40,8 @@ export const RevenueLineChart: React.FC<RevenueLineChartProps> = ({
 
   if (safeData.length === 0) {
     return (
-      <Card title={title}>
-        <Text style={styles.emptyText}>No data available</Text>
+      <Card title={cardTitle}>
+        <Text style={styles.emptyText}>{t('common.noData')}</Text>
       </Card>
     );
   }
@@ -61,14 +64,14 @@ export const RevenueLineChart: React.FC<RevenueLineChartProps> = ({
   const avgRevenue = totalRevenue / safeData.length;
 
   return (
-    <Card title={title}>
+    <Card title={cardTitle}>
       <View style={styles.summaryRow}>
         <View style={styles.summaryItem}>
-          <Text style={styles.summaryLabel}>Total</Text>
+          <Text style={styles.summaryLabel}>{t('analytics.total')}</Text>
           <Text style={styles.summaryValue}>{formatCompactCurrency(totalRevenue)}</Text>
         </View>
         <View style={styles.summaryItem}>
-          <Text style={styles.summaryLabel}>Daily Avg</Text>
+          <Text style={styles.summaryLabel}>{t('analytics.dailyAvg')}</Text>
           <Text style={styles.summaryValue}>{formatCompactCurrency(avgRevenue)}</Text>
         </View>
       </View>

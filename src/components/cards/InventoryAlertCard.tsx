@@ -4,6 +4,7 @@ import { Feather } from '@expo/vector-icons';
 import { colors } from '../../utils/colors';
 import { InventoryAlerts } from '../../types/api.types';
 import Card from '../common/Card';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface InventoryAlertCardProps {
   alerts?: InventoryAlerts | null;
@@ -21,6 +22,7 @@ export const InventoryAlertCard: React.FC<InventoryAlertCardProps> = ({
   alerts,
   onPress,
 }) => {
+  const { t } = useTranslation();
   const safeAlerts = alerts ?? defaultAlerts;
   const lowStockItems = safeAlerts.lowStockItems ?? [];
   const hasAlerts = (safeAlerts.lowStockCount ?? 0) > 0 || (safeAlerts.reorderCount ?? 0) > 0;
@@ -32,8 +34,8 @@ export const InventoryAlertCard: React.FC<InventoryAlertCardProps> = ({
           <View style={styles.healthyIcon}>
             <Feather name="check-circle" size={24} color={colors.success} />
           </View>
-          <Text style={styles.healthyTitle}>Inventory Healthy</Text>
-          <Text style={styles.healthySubtitle}>All stock levels are normal</Text>
+          <Text style={styles.healthyTitle}>{t('inventory.healthyInventory')}</Text>
+          <Text style={styles.healthySubtitle}>{t('inventory.noAlerts')}</Text>
         </View>
       </Card>
     );
@@ -60,13 +62,13 @@ export const InventoryAlertCard: React.FC<InventoryAlertCardProps> = ({
             <Feather name="alert-triangle" size={20} color={colors.warning} />
           </View>
           <View style={styles.alertContent}>
-            <Text style={styles.alertTitle}>Inventory Alerts</Text>
+            <Text style={styles.alertTitle}>{t('home.inventoryAlerts')}</Text>
             <View style={styles.alertStats}>
               {(safeAlerts.lowStockCount ?? 0) > 0 && (
                 <View style={styles.alertBadge}>
                   <View style={[styles.alertDot, { backgroundColor: colors.danger }]} />
                   <Text style={styles.alertBadgeText}>
-                    {safeAlerts.lowStockCount} Low Stock
+                    {safeAlerts.lowStockCount} {t('inventory.lowStock')}
                   </Text>
                 </View>
               )}
@@ -74,7 +76,7 @@ export const InventoryAlertCard: React.FC<InventoryAlertCardProps> = ({
                 <View style={styles.alertBadge}>
                   <View style={[styles.alertDot, { backgroundColor: colors.warning }]} />
                   <Text style={styles.alertBadgeText}>
-                    {safeAlerts.reorderCount} Reorder
+                    {safeAlerts.reorderCount} {t('inventory.reorder')}
                   </Text>
                 </View>
               )}
@@ -112,7 +114,7 @@ export const InventoryAlertCard: React.FC<InventoryAlertCardProps> = ({
             ))}
             {lowStockItems.length > 3 && (
               <Text style={styles.moreText}>
-                +{lowStockItems.length - 3} more items
+                {t('format.moreItems', { count: lowStockItems.length - 3 })}
               </Text>
             )}
           </View>

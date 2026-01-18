@@ -4,6 +4,7 @@ import { Feather } from '@expo/vector-icons';
 import { colors } from '../../utils/colors';
 import { DashboardComparison, TrendDirection } from '../../types/api.types';
 import Card from '../common/Card';
+import { useTranslation } from '../../hooks/useTranslation';
 
 interface TrendCardProps {
   comparison?: DashboardComparison | null;
@@ -18,6 +19,7 @@ const defaultComparison: DashboardComparison = {
 };
 
 export const TrendCard: React.FC<TrendCardProps> = ({ comparison }) => {
+  const { t } = useTranslation();
   const data = comparison ?? defaultComparison;
 
   const getTrendIcon = (trend: TrendDirection): keyof typeof Feather.glyphMap => {
@@ -44,11 +46,22 @@ export const TrendCard: React.FC<TrendCardProps> = ({ comparison }) => {
 
   const trendColor = getTrendColor(data.trend);
 
+  const getTrendLabel = (trend: TrendDirection): string => {
+    switch (trend) {
+      case 'UP':
+        return `${t('trends.up')} ${t('trends.vsLastPeriod')}`;
+      case 'DOWN':
+        return `${t('trends.down')} ${t('trends.vsLastPeriod')}`;
+      default:
+        return t('trends.stable');
+    }
+  };
+
   const metrics = [
-    { label: 'Income', value: data.incomeChange ?? 0, positive: true },
-    { label: 'Expenses', value: data.expenseChange ?? 0, positive: false },
-    { label: 'Profit', value: data.profitChange ?? 0, positive: true },
-    { label: 'Orders', value: data.orderCountChange ?? 0, positive: true },
+    { label: t('home.revenue'), value: data.incomeChange ?? 0, positive: true },
+    { label: t('common.expenses'), value: data.expenseChange ?? 0, positive: false },
+    { label: t('home.profit'), value: data.profitChange ?? 0, positive: true },
+    { label: t('home.orders'), value: data.orderCountChange ?? 0, positive: true },
   ];
 
   return (
@@ -57,7 +70,7 @@ export const TrendCard: React.FC<TrendCardProps> = ({ comparison }) => {
         <View style={[styles.trendBadge, { backgroundColor: `${trendColor}15` }]}>
           <Feather name={getTrendIcon(data.trend)} size={18} color={trendColor} />
           <Text style={[styles.trendText, { color: trendColor }]}>
-            {data.trend === 'STABLE' ? 'Stable' : `${data.trend === 'UP' ? 'Up' : 'Down'} vs Yesterday`}
+            {getTrendLabel(data.trend)}
           </Text>
         </View>
       </View>

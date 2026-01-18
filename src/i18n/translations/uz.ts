@@ -17,6 +17,10 @@ export default {
     pullToRefresh: 'Yangilash uchun torting',
     seeAll: 'Barchasi',
     viewAll: "Barchasini ko'rish",
+    owner: 'Egasi',
+    expenses: 'Xarajatlar',
+    current: 'Joriy',
+    minimum: 'Minimal',
   },
 
   // Navigation
@@ -64,15 +68,19 @@ export default {
   // Analytics Screen
   analytics: {
     title: 'Tahlil',
-    subtitle: 'Biznes tahlili',
+    subtitle: 'Biznes samaradorligi tahlili',
     revenueTrend: 'Daromad dinamikasi',
-    salesByCategory: 'Kategoriya bo\'yicha sotuvlar',
-    peakHours: "Eng band soatlar",
+    salesByCategory: "Kategoriya bo'yicha sotuvlar",
+    peakHours: 'Eng band soatlar',
     topSellingItems: "Eng ko'p sotilganlar",
     revenueByType: "Tur bo'yicha daromad",
+    revenueByOrderType: "Buyurtma turi bo'yicha daromad",
     total: 'Jami',
     dailyAvg: "Kunlik o'rtacha",
     peakTime: 'Pik vaqt',
+    peakOrders: 'Pik buyurtmalar',
+    offPeak: 'Pik tashqari',
+    peakPercentage: 'Pik %',
     busiestHours: 'Eng band soatlar',
     dateRange: 'Davr',
     last7Days: "So'nggi 7 kun",
@@ -80,12 +88,32 @@ export default {
     thisMonth: 'Bu oy',
     lastMonth: "O'tgan oy",
     custom: 'Tanlash',
+    costAnalysis: 'Xarajat tahlili',
+  },
+
+  // COGS (Cost of Goods Sold)
+  cogs: {
+    foodCost: 'Oziq-ovqat tannarxi',
+    grossProfit: 'Yalpi foyda',
+    grossMargin: 'Yalpi marja',
+    totalCogs: 'Jami tannarx',
+    margin: 'Marja',
+  },
+
+  // Order Statistics
+  orderStats: {
+    title: 'Buyurtma statistikasi',
+    totalOrders: 'Jami buyurtmalar',
+    avgOrderValue: "O'rtacha chek",
+    itemsSold: 'Sotilgan mahsulotlar',
+    completed: 'Bajarilgan',
+    cancelled: 'Bekor qilingan',
   },
 
   // Inventory Screen
   inventory: {
     title: 'Ombor',
-    subtitle: 'Zaxira boshqaruvi',
+    subtitle: "Zaxira ogohlantirishlari va ko'rsatkichlar",
     stockAlerts: 'Zaxira ogohlantirishlari',
     allItems: 'Barcha mahsulotlar',
     critical: 'Kritik',
@@ -97,8 +125,12 @@ export default {
     daysToSell: 'Sotilish kuni',
     currentStock: 'Joriy zaxira',
     minStock: 'Min. zaxira',
-    healthyInventory: "Zaxiralar me'yorda",
+    healthyInventory: "Ombor sog'lom",
+    allStockLevelsHealthy: "Barcha zaxiralar me'yorda",
+    noItemsNeedAttention: "E'tibor talab qiladigan mahsulotlar yo'q",
     noAlerts: "Zaxira ogohlantirishlari yo'q",
+    criticalItems: 'Kritik mahsulotlar',
+    reorderQueue: 'Buyurtma navbati',
   },
 
   // Reports Screen
@@ -190,16 +222,21 @@ export default {
     percentage: '{{value}}%',
     items: '{{count}} ta mahsulot',
     sold: '{{count}} ta sotildi',
+    moreItems: '+{{count}} ta yana',
   },
 
   // Errors
   errors: {
     generic: "Nimadir noto'g'ri ketdi",
-    network: "Tarmoq xatosi. Ulanishni tekshiring.",
+    network: 'Tarmoq xatosi. Ulanishni tekshiring.',
     timeout: "So'rov vaqti tugadi. Qaytadan urining.",
     unauthorized: 'Sessiya tugadi. Qaytadan kiring.',
     notFound: 'Resurs topilmadi',
     serverError: 'Server xatosi. Keyinroq urining.',
+    dashboardError: "Boshqaruv paneli ma'lumotlarini yuklab bo'lmadi",
+    analyticsError: "Tahlil ma'lumotlarini yuklab bo'lmadi",
+    inventoryError: "Ombor ma'lumotlarini yuklab bo'lmadi",
+    reportsError: "Hisobot ma'lumotlarini yuklab bo'lmadi",
   },
 
   // Card Titles

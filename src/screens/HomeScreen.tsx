@@ -89,7 +89,7 @@ export const HomeScreen: React.FC = () => {
     if (isError || !data) {
       return (
         <ErrorState
-          message="Unable to load dashboard data"
+          message={t('errors.dashboardError')}
           onRetry={refetch}
           fullScreen
         />
@@ -120,7 +120,7 @@ export const HomeScreen: React.FC = () => {
         <View style={styles.section}>
           <RevenueByTypeChart
             data={data.incomeByOrderType}
-            title="Revenue by Order Type"
+            title={t('analytics.revenueByOrderType')}
           />
         </View>
 
@@ -159,7 +159,7 @@ export const HomeScreen: React.FC = () => {
           <View style={styles.headerTop}>
             <View style={styles.greeting}>
               <Text style={styles.greetingText}>
-                {getGreeting()}, {user?.firstName || 'Owner'}
+                {getGreeting()}, {user?.firstName || t('common.owner')}
               </Text>
               <Text style={styles.date}>
                 {formatDate(new Date().toISOString(), 'long')}

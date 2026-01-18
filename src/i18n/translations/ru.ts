@@ -17,6 +17,10 @@ export default {
     pullToRefresh: 'Потяните для обновления',
     seeAll: 'Все',
     viewAll: 'Показать все',
+    owner: 'Владелец',
+    expenses: 'Расходы',
+    current: 'Текущий',
+    minimum: 'Минимум',
   },
 
   // Navigation
@@ -64,15 +68,19 @@ export default {
   // Analytics Screen
   analytics: {
     title: 'Аналитика',
-    subtitle: 'Бизнес-аналитика',
+    subtitle: 'Аналитика эффективности бизнеса',
     revenueTrend: 'Динамика выручки',
     salesByCategory: 'Продажи по категориям',
     peakHours: 'Часы пик',
     topSellingItems: 'Топ продаж',
     revenueByType: 'Выручка по типам',
+    revenueByOrderType: 'Выручка по типу заказа',
     total: 'Всего',
     dailyAvg: 'Средняя/день',
     peakTime: 'Пиковое время',
+    peakOrders: 'Пиковые заказы',
+    offPeak: 'Вне пика',
+    peakPercentage: 'Пик %',
     busiestHours: 'Самые загруженные часы',
     dateRange: 'Период',
     last7Days: 'Последние 7 дней',
@@ -80,12 +88,32 @@ export default {
     thisMonth: 'Этот месяц',
     lastMonth: 'Прошлый месяц',
     custom: 'Выбрать',
+    costAnalysis: 'Анализ затрат',
+  },
+
+  // COGS (Cost of Goods Sold)
+  cogs: {
+    foodCost: 'Себестоимость',
+    grossProfit: 'Валовая прибыль',
+    grossMargin: 'Валовая маржа',
+    totalCogs: 'Общая себестоимость',
+    margin: 'Маржа',
+  },
+
+  // Order Statistics
+  orderStats: {
+    title: 'Статистика заказов',
+    totalOrders: 'Всего заказов',
+    avgOrderValue: 'Средний чек',
+    itemsSold: 'Продано товаров',
+    completed: 'Выполнено',
+    cancelled: 'Отменено',
   },
 
   // Inventory Screen
   inventory: {
     title: 'Склад',
-    subtitle: 'Управление запасами',
+    subtitle: 'Оповещения и показатели запасов',
     stockAlerts: 'Оповещения о запасах',
     allItems: 'Все товары',
     critical: 'Критично',
@@ -97,8 +125,12 @@ export default {
     daysToSell: 'Дней до продажи',
     currentStock: 'Текущий запас',
     minStock: 'Мин. запас',
-    healthyInventory: 'Запасы в норме',
+    healthyInventory: 'Склад в норме',
+    allStockLevelsHealthy: 'Все запасы в норме',
+    noItemsNeedAttention: 'Нет товаров, требующих внимания',
     noAlerts: 'Нет оповещений о запасах',
+    criticalItems: 'Критичные товары',
+    reorderQueue: 'Очередь заказа',
   },
 
   // Reports Screen
@@ -190,6 +222,7 @@ export default {
     percentage: '{{value}}%',
     items: '{{count}} товаров',
     sold: '{{count}} продано',
+    moreItems: '+{{count}} ещё',
   },
 
   // Errors
@@ -200,6 +233,10 @@ export default {
     unauthorized: 'Сессия истекла. Войдите снова.',
     notFound: 'Ресурс не найден',
     serverError: 'Ошибка сервера. Попробуйте позже.',
+    dashboardError: 'Не удалось загрузить данные панели',
+    analyticsError: 'Не удалось загрузить аналитику',
+    inventoryError: 'Не удалось загрузить данные склада',
+    reportsError: 'Не удалось загрузить отчёты',
   },
 
   // Card Titles

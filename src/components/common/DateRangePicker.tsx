@@ -1,6 +1,7 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { colors } from '../../utils/colors';
+import { useTranslation } from '../../hooks/useTranslation';
 
 type DateRangeOption = '7days' | '30days' | 'custom';
 
@@ -10,17 +11,19 @@ interface DateRangePickerProps {
   onCustomPress?: () => void;
 }
 
-const options: { key: DateRangeOption; label: string }[] = [
-  { key: '7days', label: 'Last 7 Days' },
-  { key: '30days', label: 'Last 30 Days' },
-  { key: 'custom', label: 'Custom' },
-];
-
 export const DateRangePicker: React.FC<DateRangePickerProps> = ({
   selected,
   onSelect,
   onCustomPress,
 }) => {
+  const { t } = useTranslation();
+
+  const options: { key: DateRangeOption; label: string }[] = [
+    { key: '7days', label: t('analytics.last7Days') },
+    { key: '30days', label: t('analytics.last30Days') },
+    { key: 'custom', label: t('analytics.custom') },
+  ];
+
   const handlePress = (option: DateRangeOption) => {
     if (option === 'custom' && onCustomPress) {
       onCustomPress();
