@@ -192,19 +192,31 @@ export interface CustomerLTV {
 
 // ============== Notifications Types ==============
 
+export type NotificationStatus = 'READ' | 'UNREAD';
+
 export interface Notification {
   id: number;
+  userRole: string;
+  userId: number | null;
   type: string;
   title: string;
   message: string;
-  priority: number;
-  read: boolean;
+  orderId: number | null;
+  orderNumber: string | null;
+  status: NotificationStatus;
   createdAt: string;
+  readAt: string | null;
+  metadata: Record<string, unknown> | null;
+  priority: number;
 }
 
 export interface NotificationsResponse {
-  content: Notification[];
+  totalPages: number;
   totalElements: number;
+  first: boolean;
+  last: boolean;
+  size: number;
+  content: Notification[];
 }
 
 export interface UnreadCountResponse {

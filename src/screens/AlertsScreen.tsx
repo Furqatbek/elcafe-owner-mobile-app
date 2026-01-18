@@ -23,6 +23,9 @@ import { EmptyState, LoadingState, ErrorState } from '../components/common';
 
 const getNotificationIcon = (type: string): keyof typeof Feather.glyphMap => {
   const typeIcons: Record<string, keyof typeof Feather.glyphMap> = {
+    NEW_ORDER_RECEIVED: 'shopping-cart',
+    ORDER_COMPLETED: 'check-circle',
+    ORDER_CANCELLED: 'x-circle',
     STOCK_ALERT: 'package',
     LOW_STOCK: 'alert-triangle',
     FINANCIAL: 'dollar-sign',
@@ -35,6 +38,9 @@ const getNotificationIcon = (type: string): keyof typeof Feather.glyphMap => {
 
 const getNotificationColor = (type: string): string => {
   const typeColors: Record<string, string> = {
+    NEW_ORDER_RECEIVED: colors.success,
+    ORDER_COMPLETED: colors.success,
+    ORDER_CANCELLED: colors.danger,
     STOCK_ALERT: colors.warning,
     LOW_STOCK: colors.danger,
     FINANCIAL: colors.success,
@@ -61,7 +67,7 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
     <TouchableOpacity
       style={[
         styles.notificationItem,
-        !notification.read && styles.notificationUnread,
+        notification.status === 'UNREAD' && styles.notificationUnread,
       ]}
       onPress={() => onPress(notification.id)}
       activeOpacity={0.7}
@@ -72,11 +78,11 @@ const NotificationItem: React.FC<NotificationItemProps> = ({
         </View>
         <View style={styles.textContainer}>
           <View style={styles.titleRow}>
-            {!notification.read && <View style={styles.unreadDot} />}
+            {notification.status === 'UNREAD' && <View style={styles.unreadDot} />}
             <Text
               style={[
                 styles.notificationTitle,
-                !notification.read && styles.notificationTitleUnread,
+                notification.status === 'UNREAD' && styles.notificationTitleUnread,
               ]}
               numberOfLines={1}
             >
@@ -117,7 +123,7 @@ export const AlertsScreen: React.FC = () => {
     (id: number) => {
       const notifications = data?.content ?? [];
       const notification = notifications.find((n) => n.id === id);
-      if (notification && !notification.read) {
+      if (notification && notification.status === 'UNREAD') {
         markAsRead(id);
       }
     },
@@ -152,7 +158,7 @@ export const AlertsScreen: React.FC = () => {
 
   const renderHeader = () => {
     const notifications = data?.content ?? [];
-    const hasUnread = notifications.some((n) => !n.read);
+    const hasUnread = notifications.some((n) => n.status === 'UNREAD');
 
     return (
       <View style={styles.header}>
