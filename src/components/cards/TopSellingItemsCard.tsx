@@ -9,24 +9,23 @@ import { useTranslation } from '../../hooks/useTranslation';
 
 interface TopSellingItemsCardProps {
   items?: SoldItem[] | null;
-  limit?: number;
 }
 
 export const TopSellingItemsCard: React.FC<TopSellingItemsCardProps> = ({
   items,
-  limit = 3,
 }) => {
   const { t } = useTranslation();
   const safeItems = items ?? [];
-  const topItems = safeItems.slice(0, limit);
 
-  if (topItems.length === 0) {
+  if (safeItems.length === 0) {
     return (
-      <Card title={t('analytics.topSellingItems')}>
+      <Card title={t('analytics.soldItems')}>
         <Text style={styles.emptyText}>{t('common.noData')}</Text>
       </Card>
     );
   }
+
+  const cardTitle = t('analytics.soldItemsCount', { count: safeItems.length });
 
   const getMedalColor = (index: number): string => {
     switch (index) {
@@ -42,13 +41,13 @@ export const TopSellingItemsCard: React.FC<TopSellingItemsCardProps> = ({
   };
 
   return (
-    <Card title={t('analytics.topSellingItems')}>
-      {topItems.map((item, index) => (
+    <Card title={cardTitle}>
+      {safeItems.map((item, index) => (
         <View
           key={item.productName}
           style={[
             styles.itemRow,
-            index < topItems.length - 1 && styles.itemBorder,
+            index < safeItems.length - 1 && styles.itemBorder,
           ]}
         >
           <View style={[styles.rankBadge, { backgroundColor: `${getMedalColor(index)}20` }]}>

@@ -73,6 +73,8 @@ export default {
     salesByCategory: "Kategoriya bo'yicha sotuvlar",
     peakHours: 'Eng band soatlar',
     topSellingItems: "Eng ko'p sotilganlar",
+    soldItems: 'Sotilgan mahsulotlar',
+    soldItemsCount: 'Sotilgan mahsulotlar ({{count}})',
     revenueByType: "Tur bo'yicha daromad",
     revenueByOrderType: "Buyurtma turi bo'yicha daromad",
     total: 'Jami',

@@ -73,6 +73,8 @@ export default {
     salesByCategory: 'Продажи по категориям',
     peakHours: 'Часы пик',
     topSellingItems: 'Топ продаж',
+    soldItems: 'Проданные товары',
+    soldItemsCount: 'Проданные товары ({{count}})',
     revenueByType: 'Выручка по типам',
     revenueByOrderType: 'Выручка по типу заказа',
     total: 'Всего',

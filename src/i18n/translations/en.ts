@@ -73,6 +73,8 @@ export default {
     salesByCategory: 'Sales by Category',
     peakHours: 'Peak Hours',
     topSellingItems: 'Top Selling Items',
+    soldItems: 'Sold Items',
+    soldItemsCount: 'Sold Items ({{count}})',
     revenueByType: 'Revenue by Type',
     revenueByOrderType: 'Revenue by Order Type',
     total: 'Total',
