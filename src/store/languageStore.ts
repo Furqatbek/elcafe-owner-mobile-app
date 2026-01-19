@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { Platform } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
-import * as Localization from 'expo-localization';
+import { getLocales } from 'expo-localization';
 import i18n, { Language, setLanguage as setI18nLanguage } from '../i18n';
 
 const LANGUAGE_KEY = 'app_language';
@@ -31,7 +31,8 @@ interface LanguageStore {
 }
 
 const getDeviceLanguage = (): Language => {
-  const deviceLocale = Localization.locale.split('-')[0];
+  const locales = getLocales();
+  const deviceLocale = locales?.[0]?.languageCode ?? 'en';
   return ['en', 'ru', 'uz'].includes(deviceLocale) ? (deviceLocale as Language) : 'en';
 };
 
