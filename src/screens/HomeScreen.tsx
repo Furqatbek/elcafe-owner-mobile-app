@@ -8,6 +8,7 @@ import {
   SafeAreaView,
   TouchableOpacity,
   Alert,
+  Platform,
 } from 'react-native';
 import { Feather } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
@@ -61,20 +62,27 @@ export const HomeScreen: React.FC = () => {
   }, [navigation, data?.soldItems]);
 
   const handleLogout = () => {
-    Alert.alert(
-      t('settings.logout'),
-      t('settings.logoutConfirm'),
-      [
-        { text: t('common.cancel'), style: 'cancel' },
-        {
-          text: t('settings.logout'),
-          style: 'destructive',
-          onPress: () => {
-            logout();
+    if (Platform.OS === 'web') {
+      // Use window.confirm for web since Alert.alert doesn't work well
+      if (window.confirm(t('settings.logoutConfirm'))) {
+        logout();
+      }
+    } else {
+      Alert.alert(
+        t('settings.logout'),
+        t('settings.logoutConfirm'),
+        [
+          { text: t('common.cancel'), style: 'cancel' },
+          {
+            text: t('settings.logout'),
+            style: 'destructive',
+            onPress: () => {
+              logout();
+            },
           },
-        },
-      ]
-    );
+        ]
+      );
+    }
   };
 
   const handlePeriodSelect = useCallback((newPeriod: PeriodType) => {
