@@ -42,7 +42,8 @@ export const HomeScreen: React.FC = () => {
   const [customDateRange, setCustomDateRange] = useState<DateRange | undefined>();
   const [showDatePicker, setShowDatePicker] = useState(false);
   const { data, isLoading, isError, refetch, isRefetching } = useDashboard(period, customDateRange);
-  const { user, logout } = useAuthStore();
+  const user = useAuthStore((state) => state.user);
+  const logout = useAuthStore((state) => state.logout);
   const { t } = useTranslation();
 
   const handleRefresh = useCallback(() => {
@@ -59,7 +60,7 @@ export const HomeScreen: React.FC = () => {
     }
   }, [navigation, data?.soldItems]);
 
-  const handleLogout = useCallback(() => {
+  const handleLogout = () => {
     Alert.alert(
       t('settings.logout'),
       t('settings.logoutConfirm'),
@@ -68,17 +69,13 @@ export const HomeScreen: React.FC = () => {
         {
           text: t('settings.logout'),
           style: 'destructive',
-          onPress: async () => {
-            try {
-              await logout();
-            } catch (error) {
-              console.error('Logout error:', error);
-            }
+          onPress: () => {
+            logout();
           },
         },
       ]
     );
-  }, [logout, t]);
+  };
 
   const handlePeriodSelect = useCallback((newPeriod: PeriodType) => {
     if (newPeriod !== 'custom') {
