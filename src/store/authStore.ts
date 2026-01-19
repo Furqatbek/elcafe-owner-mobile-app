@@ -87,19 +87,25 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       }
 
       const { accessToken, refreshToken, user } = response.data;
+      const restaurantId = user?.restaurantId ?? null;
 
-      await Promise.all([
+      const storagePromises: Promise<void>[] = [
         storage.setItem(ACCESS_TOKEN_KEY, accessToken),
         storage.setItem(REFRESH_TOKEN_KEY, refreshToken),
         storage.setItem(USER_KEY, JSON.stringify(user)),
-        storage.setItem(RESTAURANT_KEY, user.restaurantId.toString()),
-      ]);
+      ];
+
+      if (restaurantId !== null) {
+        storagePromises.push(storage.setItem(RESTAURANT_KEY, restaurantId.toString()));
+      }
+
+      await Promise.all(storagePromises);
 
       set({
         accessToken,
         refreshToken,
         user,
-        restaurantId: user.restaurantId,
+        restaurantId,
         isAuthenticated: true,
       });
     } catch (error) {
@@ -109,31 +115,33 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   },
 
   logout: async () => {
-    try {
-      // Try to call logout API (optional, may fail if token expired)
-      try {
-        await authApi.logout();
-      } catch (e) {
-        // Ignore logout API errors
-      }
+    // Always clear state first to ensure user is logged out
+    set({
+      accessToken: null,
+      refreshToken: null,
+      user: null,
+      restaurantId: null,
+      isAuthenticated: false,
+    });
 
+    // Try to call logout API (optional, may fail if token expired)
+    try {
+      await authApi.logout();
+    } catch (e) {
+      // Ignore logout API errors
+    }
+
+    // Try to clear storage (non-blocking)
+    try {
       await Promise.all([
         storage.deleteItem(ACCESS_TOKEN_KEY),
         storage.deleteItem(REFRESH_TOKEN_KEY),
         storage.deleteItem(USER_KEY),
         storage.deleteItem(RESTAURANT_KEY),
       ]);
-
-      set({
-        accessToken: null,
-        refreshToken: null,
-        user: null,
-        restaurantId: null,
-        isAuthenticated: false,
-      });
     } catch (error) {
-      console.error('Error clearing auth data:', error);
-      throw error;
+      console.error('Error clearing auth storage:', error);
+      // Don't throw - user is already logged out in state
     }
   },
 

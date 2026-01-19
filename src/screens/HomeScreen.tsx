@@ -68,7 +68,13 @@ export const HomeScreen: React.FC = () => {
         {
           text: t('settings.logout'),
           style: 'destructive',
-          onPress: () => logout(),
+          onPress: async () => {
+            try {
+              await logout();
+            } catch (error) {
+              console.error('Logout error:', error);
+            }
+          },
         },
       ]
     );
