@@ -3,6 +3,7 @@ import { Platform } from 'react-native';
 import * as SecureStore from 'expo-secure-store';
 import { User, AuthState, LoginCredentials } from '../types/api.types';
 import { authApi } from '../api';
+import { queryClient } from '../utils/queryClient';
 
 const ACCESS_TOKEN_KEY = 'access_token';
 const REFRESH_TOKEN_KEY = 'refresh_token';
@@ -101,6 +102,9 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
 
       await Promise.all(storagePromises);
 
+      // Clear React Query cache to fetch fresh data for new user
+      queryClient.clear();
+
       set({
         accessToken,
         refreshToken,
@@ -115,6 +119,9 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   },
 
   logout: async () => {
+    // Clear React Query cache
+    queryClient.clear();
+
     // Always clear state first to ensure user is logged out
     set({
       accessToken: null,

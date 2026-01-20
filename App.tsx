@@ -2,24 +2,14 @@ import React, { useEffect, useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { View, StyleSheet, ActivityIndicator } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { QueryClientProvider } from '@tanstack/react-query';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { RootNavigator } from './src/navigation';
 import { useAuth } from './src/hooks';
 import { useUnreadCount } from './src/hooks/useNotifications';
 import { useAuthStore, useLanguageStore } from './src/store';
 import { colors } from './src/utils/colors';
-
-// Create a QueryClient instance
-const queryClient = new QueryClient({
-  defaultOptions: {
-    queries: {
-      retry: 2,
-      staleTime: 1000 * 60 * 2, // 2 minutes
-      refetchOnWindowFocus: true,
-    },
-  },
-});
+import { queryClient } from './src/utils/queryClient';
 
 // Component to fetch notifications when authenticated
 const NotificationsFetcher: React.FC = () => {
