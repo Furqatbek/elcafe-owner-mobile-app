@@ -8,24 +8,12 @@ const withKotlinVersion = (config) => {
       (item) => item.type === 'property' && item.key === 'kotlinVersion'
     );
     if (kotlinVersionProp) {
-      kotlinVersionProp.value = '1.9.25';
+      kotlinVersionProp.value = '2.0.0';
     } else {
       config.modResults.push({
         type: 'property',
         key: 'kotlinVersion',
-        value: '1.9.25',
-      });
-    }
-
-    // Add suppressKotlinVersionCompatibilityCheck
-    const suppressProp = config.modResults.find(
-      (item) => item.type === 'property' && item.key === 'kotlin.suppressKotlinVersionCompatibilityCheck'
-    );
-    if (!suppressProp) {
-      config.modResults.push({
-        type: 'property',
-        key: 'kotlin.suppressKotlinVersionCompatibilityCheck',
-        value: 'true',
+        value: '2.0.0',
       });
     }
 
@@ -35,17 +23,17 @@ const withKotlinVersion = (config) => {
   // Then, modify build.gradle to force Kotlin version
   config = withProjectBuildGradle(config, (config) => {
     if (config.modResults.contents) {
-      // Replace any kotlinVersion in ext block with 1.9.25
+      // Replace any kotlinVersion in ext block with 2.0.0
       config.modResults.contents = config.modResults.contents.replace(
         /kotlinVersion\s*=\s*["'][\d.]+["']/g,
-        'kotlinVersion = "1.9.25"'
+        'kotlinVersion = "2.0.0"'
       );
 
       // If there's no kotlinVersion in ext, add it after buildscript { ext {
       if (!config.modResults.contents.includes('kotlinVersion')) {
         config.modResults.contents = config.modResults.contents.replace(
           /(buildscript\s*\{\s*ext\s*\{)/,
-          '$1\n        kotlinVersion = "1.9.25"'
+          '$1\n        kotlinVersion = "2.0.0"'
         );
       }
     }
