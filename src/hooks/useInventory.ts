@@ -5,9 +5,10 @@ import { DateRange } from '../types/api.types';
 
 export const useStockSummary = () => {
   const restaurantId = useAuthStore((state) => state.restaurantId);
+  const userId = useAuthStore((state) => state.user?.id);
 
   return useQuery({
-    queryKey: ['inventory', 'stockSummary', restaurantId],
+    queryKey: ['inventory', 'stockSummary', userId, restaurantId],
     queryFn: () => {
       if (!restaurantId) {
         throw new Error('Restaurant ID is required');
@@ -21,9 +22,10 @@ export const useStockSummary = () => {
 
 export const useInventoryTurnover = (dateRange: DateRange) => {
   const restaurantId = useAuthStore((state) => state.restaurantId);
+  const userId = useAuthStore((state) => state.user?.id);
 
   return useQuery({
-    queryKey: ['inventory', 'turnover', restaurantId, dateRange],
+    queryKey: ['inventory', 'turnover', userId, restaurantId, dateRange],
     queryFn: () => {
       if (!restaurantId) {
         throw new Error('Restaurant ID is required');

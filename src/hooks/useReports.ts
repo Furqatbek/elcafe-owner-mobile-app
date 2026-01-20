@@ -5,9 +5,10 @@ import { DateRange } from '../types/api.types';
 
 export const useProfitLoss = (dateRange: DateRange) => {
   const restaurantId = useAuthStore((state) => state.restaurantId);
+  const userId = useAuthStore((state) => state.user?.id);
 
   return useQuery({
-    queryKey: ['reports', 'profitLoss', restaurantId, dateRange],
+    queryKey: ['reports', 'profitLoss', userId, restaurantId, dateRange],
     queryFn: () => {
       if (!restaurantId) {
         throw new Error('Restaurant ID is required');
@@ -21,9 +22,10 @@ export const useProfitLoss = (dateRange: DateRange) => {
 
 export const useCOGSReport = (dateRange: DateRange) => {
   const restaurantId = useAuthStore((state) => state.restaurantId);
+  const userId = useAuthStore((state) => state.user?.id);
 
   return useQuery({
-    queryKey: ['reports', 'cogs', restaurantId, dateRange],
+    queryKey: ['reports', 'cogs', userId, restaurantId, dateRange],
     queryFn: () => {
       if (!restaurantId) {
         throw new Error('Restaurant ID is required');
@@ -37,9 +39,10 @@ export const useCOGSReport = (dateRange: DateRange) => {
 
 export const useCustomerRetention = (dateRange: DateRange) => {
   const restaurantId = useAuthStore((state) => state.restaurantId);
+  const userId = useAuthStore((state) => state.user?.id);
 
   return useQuery({
-    queryKey: ['reports', 'customerRetention', restaurantId, dateRange],
+    queryKey: ['reports', 'customerRetention', userId, restaurantId, dateRange],
     queryFn: () => {
       if (!restaurantId) {
         throw new Error('Restaurant ID is required');
@@ -53,9 +56,10 @@ export const useCustomerRetention = (dateRange: DateRange) => {
 
 export const useCustomerLTV = () => {
   const restaurantId = useAuthStore((state) => state.restaurantId);
+  const userId = useAuthStore((state) => state.user?.id);
 
   return useQuery({
-    queryKey: ['reports', 'customerLTV', restaurantId],
+    queryKey: ['reports', 'customerLTV', userId, restaurantId],
     queryFn: () => {
       if (!restaurantId) {
         throw new Error('Restaurant ID is required');

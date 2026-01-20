@@ -5,9 +5,10 @@ import { DateRange } from '../types/api.types';
 
 export const useDailyRevenue = (dateRange: DateRange) => {
   const restaurantId = useAuthStore((state) => state.restaurantId);
+  const userId = useAuthStore((state) => state.user?.id);
 
   return useQuery({
-    queryKey: ['analytics', 'dailyRevenue', restaurantId, dateRange],
+    queryKey: ['analytics', 'dailyRevenue', userId, restaurantId, dateRange],
     queryFn: () => {
       if (!restaurantId) {
         throw new Error('Restaurant ID is required');
@@ -21,9 +22,10 @@ export const useDailyRevenue = (dateRange: DateRange) => {
 
 export const useCOGS = (dateRange: DateRange) => {
   const restaurantId = useAuthStore((state) => state.restaurantId);
+  const userId = useAuthStore((state) => state.user?.id);
 
   return useQuery({
-    queryKey: ['analytics', 'cogs', restaurantId, dateRange],
+    queryKey: ['analytics', 'cogs', userId, restaurantId, dateRange],
     queryFn: () => {
       if (!restaurantId) {
         throw new Error('Restaurant ID is required');
@@ -37,9 +39,10 @@ export const useCOGS = (dateRange: DateRange) => {
 
 export const usePeakHours = (dateRange: DateRange) => {
   const restaurantId = useAuthStore((state) => state.restaurantId);
+  const userId = useAuthStore((state) => state.user?.id);
 
   return useQuery({
-    queryKey: ['analytics', 'peakHours', restaurantId, dateRange],
+    queryKey: ['analytics', 'peakHours', userId, restaurantId, dateRange],
     queryFn: () => {
       if (!restaurantId) {
         throw new Error('Restaurant ID is required');
@@ -53,9 +56,10 @@ export const usePeakHours = (dateRange: DateRange) => {
 
 export const useSalesByCategory = (dateRange: DateRange) => {
   const restaurantId = useAuthStore((state) => state.restaurantId);
+  const userId = useAuthStore((state) => state.user?.id);
 
   return useQuery({
-    queryKey: ['analytics', 'salesByCategory', restaurantId, dateRange],
+    queryKey: ['analytics', 'salesByCategory', userId, restaurantId, dateRange],
     queryFn: () => {
       if (!restaurantId) {
         throw new Error('Restaurant ID is required');
