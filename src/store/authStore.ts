@@ -102,10 +102,11 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
 
       await Promise.all(storagePromises);
 
-      // Remove all cached query data from previous user
-      queryClient.removeQueries();
+      // Clear all cached query data from previous user
+      queryClient.clear();
 
-      // Set new auth state
+      // Set new auth state - this will trigger component re-renders
+      // and queries will be re-created with fresh data
       set({
         accessToken,
         refreshToken,
@@ -113,12 +114,6 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
         restaurantId,
         isAuthenticated: true,
       });
-
-      // Invalidate all queries to trigger fresh fetches with new user data
-      // Use setTimeout to ensure state update has propagated
-      setTimeout(() => {
-        queryClient.invalidateQueries();
-      }, 100);
     } catch (error) {
       console.error('Login error:', error);
       throw error;
@@ -126,7 +121,10 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
   },
 
   logout: async () => {
-    // Always clear state first to ensure user is logged out
+    // Clear React Query cache completely before state change
+    queryClient.clear();
+
+    // Clear state to log user out
     set({
       accessToken: null,
       refreshToken: null,
@@ -135,17 +133,7 @@ export const useAuthStore = create<AuthStore>((set, get) => ({
       isAuthenticated: false,
     });
 
-    // Clear React Query cache after state is cleared
-    queryClient.removeQueries();
-
-    // Try to call logout API (optional, may fail if token expired)
-    try {
-      await authApi.logout();
-    } catch (e) {
-      // Ignore logout API errors
-    }
-
-    // Try to clear storage (non-blocking)
+    // Clear storage (non-blocking)
     try {
       await Promise.all([
         storage.deleteItem(ACCESS_TOKEN_KEY),
